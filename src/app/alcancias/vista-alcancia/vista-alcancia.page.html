@@ -37,7 +37,7 @@
   <div class="card-container">
   
 
-  <ion-card  *ngFor="let alcancia of alcancias" class="custom-card" (click)="detallesAlcancia()">
+  <ion-card  *ngFor="let alcancia of alcancias" class="custom-card" (click)="detallesAlcancia(alcancia)">
     <img alt="Silhouette of mountains" src="./assets/img/iconodolaraldia.png" />
     <ion-card-header  >
       <ion-card-title style="font-size: 10px;" >Administrador</ion-card-title>
@@ -119,7 +119,7 @@
       <ion-card-subtitle>
         Monto a recibir: 
        
-          <ion-card-title class="custom-input" style="font-size: 32px;"> 3500$ </ion-card-title>
+          <ion-card-title class="custom-input" style="font-size: 32px;">${{alcanciaSeleccionada.alcancia.montoARecibir}}</ion-card-title>
        
       </ion-card-subtitle>
     </ion-card-content>
@@ -133,7 +133,7 @@
     <ion-col>
     <ion-card>
       <ion-card-content>
-        <ion-card-title>350$</ion-card-title>
+        <ion-card-title>${{alcanciaSeleccionada.alcancia.montoCuotas}}</ion-card-title>
         <ion-card-subtitle>Cuotas</ion-card-subtitle>
         
       </ion-card-content>

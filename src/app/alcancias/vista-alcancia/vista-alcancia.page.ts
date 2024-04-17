@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { IonModal, ModalController } from '@ionic/angular';
 import { Observable, switchMap } from 'rxjs';
 import { AlcanciasService } from 'src/app/Services/alcancias.service';
-import { alcanciasUsuario } from 'src/app/models/models';
+import { Alcancias, alcanciasUsuario } from 'src/app/models/models';
 
 @Component({
   selector: 'app-vista-alcancia',
@@ -13,11 +13,34 @@ import { alcanciasUsuario } from 'src/app/models/models';
 export class VistaAlcanciaPage implements OnInit {
 
   constructor(public modalCtrl: ModalController, public router: Router, private alcanciasService: AlcanciasService) { }
-
+  alcanciaSeleccionada: any;
   alcancias: any[] = [];
   alcanciasUsuario: alcanciasUsuario = {
     id: '',
   }
+  alcancia: Alcancias = {
+    alcancia: {
+      integrantes: 0,
+      montoARecibir: 0,
+      cuotas: 0,
+      modalidad: 0,
+      montoCuotas: 0,
+      fechadeinicio: new Date() ,
+    },
+    integrantes: {
+      nombres: '',
+      apellidos: '',
+      cedula: '',
+      turno: 0,
+    },
+    creador: {
+      nombres: '',
+      apellidos: '',
+      cedula: 0,
+      uid: ''
+    }
+  };
+
 
   async ngOnInit() {
     try {
@@ -37,9 +60,12 @@ export class VistaAlcanciaPage implements OnInit {
   modal!: IonModal;
   isExpanded: boolean = false;
 
-  detallesAlcancia(){
+  async detallesAlcancia(alcancia:any){
+    this.alcanciaSeleccionada = alcancia;
 
-    this.modal.present();
+    
+
+   await this.modal.present();
   }
 
   cerrarDetalles(){
