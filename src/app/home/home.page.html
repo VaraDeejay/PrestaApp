@@ -1,0 +1,234 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-title mode="md" class="ion-no-padding">
+      <ion-label *ngIf="user">
+        <ion-text color="warning">¡Hola!</ion-text>
+        <p><ion-text color="white"><strong>{{user.nombres}}</strong></ion-text></p>
+        <p><ion-text color="warning"><strong>Nivel 1</strong></ion-text></p>
+      </ion-label>
+    </ion-title>
+    <ion-avatar slot="end">
+      <img src="assets/imgs/Prestapp Logo.png" />
+    </ion-avatar>
+  </ion-toolbar>
+</ion-header>
+ 
+<ion-content scrollY="true" mode="ios" color="primary">
+  <ion-refresher  color="primary" slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+
+  
+
+  <ion-row class="banners">
+    <swiper [config]="bannerConfig">
+      <ng-template swiperSlide *ngFor="let account of accounts">
+        <div allign="center">
+          <ion-label *ngIf="user">
+            <span>Saldo Actual:</span>
+            <p class="acc-amt"><ion-text color="white">${{user.dinero}}</ion-text></p>
+            <span><strong> {{account?.acc_no}}</strong></span>
+          </ion-label>
+        </div>
+      </ng-template>
+    </swiper>
+  </ion-row>
+
+  <ion-row class="ion-text-center feature-list" *ngIf="features.length > 0">
+    <swiper [config]="featureConfig">
+      <ng-template swiperSlide *ngFor="let feature of features">
+        <div>
+          <ion-button (click)="openModalOnEnviarClick(feature)" slot="icon-only" [color]="feature?.color">
+            <ion-icon [name]="feature?.icon"></ion-icon>
+          </ion-button>
+          <ion-label>{{feature?.name}}</ion-label>
+        </div>
+      </ng-template>
+    </swiper>
+  </ion-row>
+
+  <ion-list scrollY="true" color="warning" class="transactions" *ngIf="datosCargados && transactions.length > 0">>
+
+    <ion-list-header>
+      <ion-label color="warning">Movimientos</ion-label>
+    </ion-list-header>
+
+    <ion-item-group color="dark">
+      <ion-item lines="full" *ngFor="let transaction of transactions">
+        <ion-thumbnail slot="start" class="ion-text-center">
+          <img [src]="'assets/imgs/' + (transaction.monto >= 0 ? 'up-right.png' : 'down-left-arrow.png')" />
+        </ion-thumbnail>
+        <ion-label>
+          <ion-text color="white">
+            {{ transaction.destinatario?.cedula !== user?.cedula ? transaction.destinatario?.nombres : (transaction?.remitente?.nombres ? transaction.remitente.nombres : 'Nombre del remitente desconocido') }}
+          </ion-text>
+          <p>
+            <ion-text color="warning">
+              {{transaction?.fecha | date: 'MMM d, y'}}
+            </ion-text>
+          </p>
+        </ion-label>
+        <ion-text slot="end" color="warning">
+          {{transaction.monto >= 0 ? '$' + transaction?.monto : '-$' + (transaction.monto * (-1))}}
+        </ion-text>
+      </ion-item>
+    </ion-item-group>
+
+  </ion-list>
+
+</ion-content>
+
+<ion-modal md="ios" #modal>
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons color="secondary" slot="start">
+          <ion-button color="white" (click)="cancel()">Volver</ion-button>
+        </ion-buttons>
+        <ion-title>Enviar dinero</ion-title>
+      </ion-toolbar>
+    </ion-header> 
+    <ion-content>
+
+      <ion-content>
+        <ion-card class="ion-padding">
+          <ion-card-content class="ion-text-center">
+            <h2>Ingrese el monto ($)</h2>
+            <ion-item lines="none" class="custom-input">
+              <ion-input [(ngModel)]="monto" type="number" style="font-size: 48px; text-align: center;" ></ion-input>
+            </ion-item>
+            <ion-button expand="block" color="primary" (click)="openSecondModal()">Continuar</ion-button>
+          </ion-card-content>
+        </ion-card>
+
+        
+  
+
+
+      </ion-content>
+
+      
+     
+      </ion-content>
+      
+  </ng-template>
+</ion-modal>
+
+<ion-modal #secondModal>
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="cancelSecondModal()">Volver</ion-button>
+        </ion-buttons>
+        <ion-title>Enviar dinero - Paso 2</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+
+      <ion-card class="ion-padding">
+        <ion-card-content class="ion-text-center">
+          <h2>Ingrese la información del destinatario</h2>
+          <ion-item>
+            <ion-label>ID</ion-label>
+            <ion-input type="text" placeholder="Ingrese el número de cédula" [(ngModel)]="cedulaDestinatario"></ion-input>
+          </ion-item>
+          <!-- Aquí puedes agregar más campos según sea necesario para la información del destinatario -->
+          <ion-button expand="block" color="primary" (click)="openThirdModal()">Enviar</ion-button>
+        </ion-card-content>
+      </ion-card>
+
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-modal #thirdModal>
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="cancelThirdModal()">Volver</ion-button>
+        </ion-buttons>
+        <ion-title>Enviar dinero - Paso 2</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+
+      <ion-card class="ion-padding">
+        <ion-card-content class="ion-text-center">
+          <h2>Por favor, envia la cantidad a los siguientes datos</h2>
+          <ion-item>
+           
+            <ion-list>
+              <ion-item>Banco de Venezuela</ion-item>
+              <ion-item>0414-7703566</ion-item>
+              <ion-item>v-26101304</ion-item>
+               <ion-input placeholder="Ingrese la referencia de su pago"></ion-input>
+            </ion-list>
+          </ion-item>
+          <!-- Aquí puedes agregar más campos según sea necesario para la información del destinatario -->
+          <ion-button expand="block" color="primary" (click)="enviarDinero()">Confirmar</ion-button>
+        </ion-card-content>
+      </ion-card>
+
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+
+<ion-modal #RecargarModal>
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="cancelRecargarModal()">Volver</ion-button>
+        </ion-buttons>
+        <ion-title>Recargar</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-card>
+
+      
+        <ion-card >
+          <ion-card-content class="ion-text-center">
+            <h2>Ingrese el monto ($)</h2>
+            <ion-item lines="none" class="custom-input">
+              <ion-input [(ngModel)]="monto" type="number" style="font-size: 48px; text-align: center;" ></ion-input>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+
+        
+  
+
+
+      
+
+      <ion-card>
+        <ion-card-content class="ion-text-center">
+          <h2>Por favor, envia la cantidad a los siguientes datos</h2>
+          <ion-item>
+           
+            <ion-list>
+              <ion-item>Banco de Venezuela</ion-item>
+              <ion-item>0414-7703566</ion-item>
+              <ion-item>v-26101304</ion-item>
+               <ion-input placeholder="Ingrese la referencia de su pago"></ion-input>
+            </ion-list>
+          </ion-item>
+          <!-- Aquí puedes agregar más campos según sea necesario para la información del destinatario -->
+          <ion-button expand="block" color="primary" (click)="cancelRecargarModal()">Confirmar</ion-button>
+        </ion-card-content>
+      </ion-card>
+    
+
+  </ion-card>
+
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+
+

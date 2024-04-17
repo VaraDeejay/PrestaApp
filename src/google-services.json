@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "665834786887",
+    "project_id": "prestaapp1",
+    "storage_bucket": "prestaapp1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665834786887:android:4c129cb451284d699ce162",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBy5zjZuCVn7e75bn8tn8aRG890Du2TxxE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

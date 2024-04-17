@@ -1,0 +1,245 @@
+<ion-header color="primary" >
+  <ion-toolbar color="primary">
+    <ion-buttons>
+    <ion-button color="tertiary" (click)="volver()"><ion-icon name="arrow-back-outline"></ion-icon></ion-button>
+  </ion-buttons>
+  </ion-toolbar>
+  
+</ion-header>
+
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-title mode="md" class="ion-no-padding">
+      <ion-label >
+        <ion-text color="warning">Nueva</ion-text>
+        <p><ion-text color="white"><strong>Alcancia</strong></ion-text></p>
+        
+      </ion-label>
+    </ion-title>
+    <ion-avatar slot="end">
+      <img src="assets/imgs/Prestapp Logo.png" />
+    </ion-avatar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content mode="ios" color="primary" [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar color="warning">
+      <ion-title size="medium">¿Qué quieres hacer?</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-segment color="warning" md="ios" [(ngModel)]="selectedSegment">
+    <ion-segment-button value="Crear">
+      <ion-label>Crear Alcancia</ion-label>
+    </ion-segment-button> 
+    <ion-segment-button value="Unirse">
+      <ion-label>Unirse</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-card class="ion-padding" *ngIf="selectedSegment === 'Crear'">
+  
+      
+        <ion-card-header>
+      <ion-title  class="ion-text-center">Selecciona</ion-title>
+    </ion-card-header>
+
+      <ion-card-content  class="ion-text-center">
+      <ion-button (click)="openConfiguracion()">Intercambio de Dinero</ion-button>
+      <ion-button>Compra de Productos</ion-button>
+    </ion-card-content>
+    </ion-card>
+    
+ 
+
+
+  <ion-content color="primary" *ngIf="selectedSegment === 'Unirse'">
+    <ion-card class="ion-padding">
+      <ion-card-content class="ion-text-center">
+        <h2>Ingresa el ID de la Alcancia</h2>
+        <ion-item lines="none" class="custom-input">
+          <ion-input  [(ngModel)]="idAlcancia" style="font-size: 16px; text-align: center;" ></ion-input>
+        </ion-item>
+        <ion-button (click)="cargarTurnos()" expand="block" color="primary" >Solicitar Unirse</ion-button>
+        <h3>Solicita el ID de la alcancia al creador de la misma.</h3>
+      </ion-card-content>
+    </ion-card>
+
+    
+
+
+
+  </ion-content>
+
+
+  <ion-card class="ion-padding" *ngIf="configuraAlcancia === true">
+    <ion-card-header class="ion-text-center" >
+     <ion-title> Configura la Alcancia </ion-title>
+    </ion-card-header>
+    <ion-card-content lines="none" class="custom-input">
+      <ion-item>
+        <ion-select [(ngModel)]="nuevaAlcancia.alcancia.integrantes" type="number" label="Integrantes" placeholder="Número de integrantes">
+
+          <ion-select-option type="number" value="2">Dos (2)</ion-select-option>
+        <ion-select-option value="4">Cuatro (4)</ion-select-option>
+        <ion-select-option value="6">Seis (6)</ion-select-option>
+        <ion-select-option value="8">Ocho (8)</ion-select-option>
+        <ion-select-option value="10">Diez (10)</ion-select-option>
+          
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-select [(ngModel)]="nuevaAlcancia.alcancia.modalidad" label="Modalidad" placeholder="Selecciona la modalidad">
+
+          <ion-select-option value="7">Semanal</ion-select-option>
+        <ion-select-option value="15">Quincenal</ion-select-option>
+        <ion-select-option value="30">Mensual</ion-select-option>
+          
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-input [(ngModel)]="nuevaAlcancia.alcancia.montoARecibir" label="Monto a recibir ($)" type="number" ></ion-input>
+      </ion-item>
+      <ion-card-content  class="ion-text-center">
+      <ion-item>
+        <ion-button (click)="openResume()" >Siguiente</ion-button>
+      </ion-item>
+    </ion-card-content>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card  class="ion-padding" *ngIf="resumeAlcancia === true">
+    <ion-card-header class="ion-text-center">
+      <ion-title>
+      Asi queda tu alcancia:
+    </ion-title>
+    </ion-card-header>
+    <ion-card-content class="ion-padding">
+      <ion-item class="ion-text-center">
+        <ion-list class="ion-text-center">
+          <ion-item>
+             <ion-item>
+              <ion-label>
+                <p>Integrantes</p>
+                <h2>{{ nuevaAlcancia.alcancia.integrantes }}</h2>
+              </ion-label>
+             </ion-item>
+           </ion-item>
+           <ion-item>
+            <ion-item>
+             <ion-label>
+               <p>Modalidad</p>
+               <h2>Pago cada {{nuevaAlcancia.alcancia.modalidad}} días</h2>
+             </ion-label>
+            </ion-item>
+          </ion-item>
+          <ion-item>
+            <ion-item>
+             <ion-label>
+               <p>Monto de pago {{modalidad}}</p>
+               <h2 type="number" >{{prevMontoCuotas.toFixed(2)}} $</h2>
+             </ion-label>
+            </ion-item>
+          </ion-item>
+          <ion-item>
+            <ion-item>
+             <ion-label expand="block">
+               <p>Numero de rondas</p>
+               <h2 type="number" >{{nuevaAlcancia.alcancia.integrantes}}</h2>
+             </ion-label>
+            </ion-item>
+          </ion-item>
+      </ion-list>
+      </ion-item  >
+      
+     
+        <ion-button expand="block" (click)="openModal()">Crear Alcancia</ion-button>
+      
+
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-modal md="ios" #modal>
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons color="secondary" slot="start">
+          <ion-button color="white" (click)="cancel()">Volver</ion-button>
+        </ion-buttons>
+        <ion-title>Inicio de Alcancia</ion-title>
+      </ion-toolbar>
+    </ion-header> 
+    <ion-content>
+
+      <ion-content>
+        <ion-card class="ion-padding">
+          <ion-card-content class="ion-text-center">
+            <h2>Fecha de inicio*</h2>
+            <ion-item lines="none" class="custom-input">
+              <ion-input  [(ngModel)]="nuevaAlcancia.alcancia.fechadeinicio" type="date" style="font-size: 18px; text-align: center;" ></ion-input>
+            </ion-item>
+            <ion-button (click)="crearAlcancia()" expand="block" color="primary" >Crear</ion-button>
+            <h3>* Al llegar la fecha de inicio, debe contar con todos los participantes integrados a la alcancia, de lo contrario, se reducira el monto a recibir de acuerdo a la cantidad de participantes ya integrados.</h3>
+          </ion-card-content>
+        </ion-card>
+
+        
+  
+
+
+      </ion-content>
+
+      
+     
+      </ion-content>
+      
+  </ng-template>
+</ion-modal>
+
+<ion-modal md="ios" #modalTurno>
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons color="secondary" slot="start">
+          <ion-button color="white" (click)="cancelModalTurno()">Volver</ion-button>
+        </ion-buttons>
+        <ion-title>Seleccionar turno</ion-title>
+      </ion-toolbar>
+    </ion-header> 
+    <ion-content>
+
+      <ion-content>
+        <ion-card class="ion-padding">
+          <ion-card-content class="ion-text-center">
+            <h2>Selecciona un turno</h2>
+            <ion-list>
+              <ion-item lines="none" class="custom-input">
+                <ion-select [(ngModel)]="selectedTurno"  placeholder="Elige">
+                  <div slot="label">Turno</div>
+                  <ion-select-option *ngFor="let turno of turnos">{{turno}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-list>
+            <ion-button (click)="seleccionarTurno(idAlcancia, selectedTurno)" expand="block" color="primary" >Unirse</ion-button>
+            <h3>Al unirse a la alcancia, estas adquiriendo un compromiso de pagos hacia el administrador en cada una de las cuotas en los dias establecidos. En caso de mora, deberas cancelar una multa por atraso y tu cuenta puede ser suspendida y/o cancelada.</h3>
+          </ion-card-content>
+        </ion-card>
+
+        
+       
+
+
+      </ion-content>
+
+      
+     
+      </ion-content>
+      
+  </ng-template>
+</ion-modal>
+
+
+

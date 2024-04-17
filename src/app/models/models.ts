@@ -1,0 +1,73 @@
+export interface Usuario {
+    email: string;
+    nombres: string;
+    apellidos: string;
+    cedula: string;
+    foto: string;
+    dinero: number;
+    password: string;
+    uid: string;
+
+
+    
+}
+
+export interface UsuarioEnvioDinero{
+
+    monto: number,
+    cedulaDestinatario: string,
+}
+
+export interface TransaccionData{
+
+    remitente: {
+        nombres: string;
+        apellidos: string;
+        // Otras propiedades del remitente, como cedula, monto, etc.
+      };
+      
+    nombres: string;
+    apellidos: string;
+    fecha: Date;
+    monto: number;
+}
+
+export interface Alcancias{
+   
+
+    creador: {
+
+        nombres: string;
+        apellidos: string;
+        cedula: number;
+        uid: string;
+
+    }
+
+    alcancia: {
+        integrantes: number;
+        montoARecibir: number;
+        cuotas: number;
+        modalidad: number;
+        montoCuotas: number;
+        fechadeinicio: Date;
+        
+    }
+
+    integrantes: {
+        nombres: string;
+        apellidos:string;
+        cedula: string;
+        turno: number;
+        
+    }
+}
+
+export interface turno{
+    id: string;
+    
+}
+
+export interface alcanciasUsuario{
+    id:string;
+}

@@ -1,0 +1,35 @@
+<ion-content color="primary">
+  <ion-button (click)="dismiss()">
+    <ion-icon name="arrow-back-outline"></ion-icon>
+  </ion-button>
+
+<ion-card>
+  <ion-title>
+   Registro de Usuario
+  </ion-title>
+</ion-card>
+
+<ion-content color="primary" class="ion-padding">
+ <ion-card expand="block" class="ion-margin-top" fill="outline"
+ color="white">
+
+ <ion-input placeholder="Nombres" [(ngModel)]="usuario.nombres" type="text"   class="primary-input" style="margin: 5% 0 0; text-align: center; " required></ion-input>
+ <ion-input placeholder="Apellidos" [(ngModel)]="usuario.apellidos" type="text"   class="primary-input" style="margin: 5% 0 0; text-align: center; " required></ion-input>
+ <ion-input placeholder="Número de Identificació (V-E)" [(ngModel)]="usuario.cedula" type="email"   class="primary-input" style="margin: 5% 0 0; text-align: center; " required></ion-input>
+  <ion-input placeholder="Correo Electrónico" type="email" [(ngModel)]="usuario.email"  class="primary-input" style="margin: 5% 0 0; text-align: center; " required></ion-input>
+  <ion-input placeholder="Contraseña" [(ngModel)]="usuario.password" type="password" style="margin: 5% 0 0; text-align: center; " class="primary-input" required></ion-input>
+  <ion-input placeholder="Repita su contraseña" type="password" style="margin: 5% 0 0; text-align: center; " class="primary-input" required></ion-input>
+
+
+  <div class="ion-margin-top ion-text-center forget;" >
+    <a>Acepto las condiciones</a>
+  </div>
+
+  
+  <div class="ion-margin-top">
+    <ion-button (click)="registrarUsuario()" color="warning" expand="block" style="font-size: 15px; margin: 5% 10% 10% "  [disabled]="!usuario.email || !usuario.password || !usuario.nombres || !usuario.apellidos ||!usuario.cedula ">REGISTRARSE</ion-button>
+  </div>
+
+</ion-card>
+</ion-content>
+</ion-content>

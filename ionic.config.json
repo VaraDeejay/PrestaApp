@@ -1,0 +1,7 @@
+{
+  "name": "PrestaApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
