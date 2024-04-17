@@ -37,6 +37,10 @@ const routes: Routes = [
     path: 'vista-alcancia',
     loadChildren: () => import('./alcancias/vista-alcancia/vista-alcancia.module').then( m => m.VistaAlcanciaPageModule)
   },
+  {
+    path: 'pruebas',
+    loadChildren: () => import('./pruebas/pruebas.module').then( m => m.PruebasPageModule)
+  },
 ];
 
 @NgModule({
