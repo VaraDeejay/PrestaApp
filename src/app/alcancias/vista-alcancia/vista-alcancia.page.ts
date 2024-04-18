@@ -20,6 +20,7 @@ export class VistaAlcanciaPage implements OnInit {
   turnoSeleccionado: any;
   diferenciaEnDias: any;
   diferenciaEnDiasDetalles: number | undefined;
+  turno: any;
 
   constructor(private authService: AuthService, private afAuth: AngularFireAuth, private datePipe: DatePipe, private firestore: AngularFirestore, public modalCtrl: ModalController, public router: Router, private alcanciasService: AlcanciasService) { }
   
@@ -33,7 +34,9 @@ export class VistaAlcanciaPage implements OnInit {
   alcancias: any[] = [];
   alcanciasUsuario: alcanciasUsuario = {
     id: '',
-  }
+  };
+  
+
   alcanciacompleta: any [] = [];
   alcancia: Alcancias = {
     alcancia: {
@@ -82,6 +85,10 @@ export class VistaAlcanciaPage implements OnInit {
 
   @ViewChild('modalTurnos')
   modalTurnos!: IonModal;
+
+  @ViewChild('modalPagar')
+  modalPagar!: IonModal;
+  
 
   async detallesAlcancia(alcancia:any){
     this.alcanciaSeleccionada = alcancia;
@@ -191,6 +198,15 @@ export class VistaAlcanciaPage implements OnInit {
   }
   cerrarModalTurnos(){
     this.modalTurnos.dismiss();
+  }
+
+  openModalPagar(turno:any){
+    this.turno = turno
+    this.modalPagar.present();
+  }
+
+  cerrarModalPagar(){
+    this.modalPagar.dismiss();
   }
 
   cerrarDetalles(){

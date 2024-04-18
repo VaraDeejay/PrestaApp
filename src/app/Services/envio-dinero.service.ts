@@ -34,7 +34,7 @@ export class EnvioDineroService {
   async enviarDinero(cedulaDestinatario: string, monto: number, remitente:Usuario): Promise<void> {
     try {
       // Buscar al usuario destinatario por su número de cédula
-      const destinatarioQuerySnapshot = await this.firestore.collection('usuarios', ref => ref.where('cedula', '==', cedulaDestinatario)).get().toPromise();
+      const destinatarioQuerySnapshot = await this.firestore.collection('usuarios', ref => ref.where('email', '==', cedulaDestinatario)).get().toPromise();
       
       if (!destinatarioQuerySnapshot || destinatarioQuerySnapshot.size === 0) {
         throw new Error('No se encontró ningún usuario con la cédula especificada');
