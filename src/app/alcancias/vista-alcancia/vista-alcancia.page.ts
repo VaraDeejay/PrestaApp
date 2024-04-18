@@ -19,11 +19,14 @@ import { AuthService } from 'src/app/Services/auth.service';
 export class VistaAlcanciaPage implements OnInit {
   turnoSeleccionado: any;
   diferenciaEnDias: any;
+  diferenciaEnDiasDetalles: number | undefined;
 
   constructor(private authService: AuthService, private afAuth: AngularFireAuth, private datePipe: DatePipe, private firestore: AngularFirestore, public modalCtrl: ModalController, public router: Router, private alcanciasService: AlcanciasService) { }
   
   docId: string | undefined;
   fechaDeturno: Date | undefined;
+  turnos: any [] = [];
+  fechaDeturnosDetalles: Date | undefined;
   
   
   alcanciaSeleccionada: any;
@@ -58,7 +61,7 @@ export class VistaAlcanciaPage implements OnInit {
 
   async ngOnInit() {
     try {
-      this.alcancias = await this.alcanciasService.obtenerDatosAlcanciasConSubcolecciones();
+      this.alcancias = await this.alcanciasService.obtenerAlcanciasUsuarioActual();
       console.log('Alcancías del usuario actual:', this.alcancias);
     } catch(error) {
       console.error('Error al obtener alcancías del usuario:', error);
@@ -76,6 +79,9 @@ export class VistaAlcanciaPage implements OnInit {
   @ViewChild('modal')
   modal!: IonModal;
   isExpanded: boolean = false;
+
+  @ViewChild('modalTurnos')
+  modalTurnos!: IonModal;
 
   async detallesAlcancia(alcancia:any){
     this.alcanciaSeleccionada = alcancia;
@@ -114,8 +120,41 @@ export class VistaAlcanciaPage implements OnInit {
                           console.log('Fecha de turno:', this.fechaDeturno);
                             // Puedes mostrar el documento o realizar cualquier otra acción aquí
                         }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        this.turnos = [];
+                        const promises: any[] = [];
+
+
+                         turnosQuerySnapshot.forEach((doc) => {
+                         const turno = doc.data();
+                         const fechaDeturnosDetalles = turno['fechaDeturno'].toDate();
+
+
+
+
+                         const promise = this.obtenerDiferenciaEnDias2(fechaDeturnosDetalles).then((diferenciaEnDiasDetalles) => {
+                        
+                          const turnoConId = {
+                            id: doc.id,
+                            ...turno,  
+                            diferenciaEnDiasDetalles: diferenciaEnDiasDetalles
+                         
+                         
+                        
+                          
+                         };
+                      
+                      return turnoConId;
+                      
+                          });
+                          promises.push(promise)
                     });
-                }
+
+                    Promise.all(promises).then((turnosConDiferenciaEnDias) => {
+                      this.turnos = turnosConDiferenciaEnDias;
+
+                  });
+                })};
                 
                 this.turnoSeleccionado = primerTurnoPosterior
                 // Puedes mostrar el turno encontrado en el modal o realizar cualquier otra acción aquí
@@ -139,7 +178,20 @@ export class VistaAlcanciaPage implements OnInit {
     const diferenciaEnDias = Math.ceil(diferenciaEnTiempo / (1000 * 3600 * 24));
     return diferenciaEnDias;
   }
+  async obtenerDiferenciaEnDias2(fechaDeturnosDetalles: Date): Promise<number> {
+    const fechaActual = new Date();
+    const diferenciaEnTiempo = fechaDeturnosDetalles.getTime() - fechaActual.getTime();
+    const diferenciaEnDiasDetalles = Math.ceil(diferenciaEnTiempo / (1000 * 3600 * 24));
+    return diferenciaEnDiasDetalles;
+  }
   
+
+  openModalTurnos(){
+    this.modalTurnos.present();
+  }
+  cerrarModalTurnos(){
+    this.modalTurnos.dismiss();
+  }
 
   cerrarDetalles(){
     this.modal.dismiss();

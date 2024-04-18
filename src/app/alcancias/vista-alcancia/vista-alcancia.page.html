@@ -173,7 +173,7 @@
           <ion-card-content>
             <ion-card-title style="font-size: 18px;">Tu turno: Turno {{docId}} | Fecha:{{fechaDeturno | date}}</ion-card-title>
             <ion-card-subtitle></ion-card-subtitle>
-            <ion-button>Ver turnos</ion-button>
+            <ion-button (click)="openModalTurnos()">Ver turnos</ion-button>
             
           </ion-card-content>
         </ion-card>
@@ -189,3 +189,82 @@
     
   </ng-template>
 </ion-modal>
+
+
+
+
+
+<ion-modal md="ios" #modalTurnos>
+  <ng-template>
+    
+    <ion-header color="primary">
+      <ion-toolbar color="primary">
+        <ion-buttons color="secondary" slot="start">
+          <ion-button color="tertiary" (click)="cerrarModalTurnos()" ><ion-icon name="arrow-back-outline"></ion-icon></ion-button>
+        </ion-buttons>
+        
+      </ion-toolbar>
+    </ion-header>
+    <ion-header class="ion-no-border">
+      <ion-toolbar color="primary">
+        <ion-title mode="md" class="ion-no-padding">
+          <ion-label >
+            <ion-text color="warning">Detalles</ion-text>
+            <p><ion-text color="white"><strong>Turnos</strong></ion-text></p>
+            
+          </ion-label>
+        </ion-title>
+        <ion-avatar slot="end">
+          <img src="assets/imgs/Prestapp Logo.png" />
+        </ion-avatar>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content scrollY="true" mode="ios" color="primary">
+     
+    
+     <ion-content color="primary">
+      
+    <ion-grid>
+      
+      <ion-card>
+        <img alt="Silhouette of mountains" src="./assets/img/iconodolarturnos.png" />
+      <ion-row>
+        <ion-col>
+    <ion-card *ngFor="let turno of turnos" color="success">
+      <ion-card-content>
+      <ion-card-subtitle>
+        Turno {{turno.id}}: {{turno.fechaDeturno.toDate() | date }} 
+       
+          <ion-card-title class="custom-input" style="font-size: 12px;">{{turno.nombre}}<ion-button style="font-size: 8px;">Pagar cuota</ion-button></ion-card-title>
+       
+      </ion-card-subtitle>
+      <ion-card-subtitle>
+       
+       
+        <ion-card-title class="custom-input" style="font-size: 12px;"> Dias restantes: {{turno.diferenciaEnDiasDetalles }}</ion-card-title>
+     
+    </ion-card-subtitle>
+    </ion-card-content>
+    </ion-card>
+    
+    
+    </ion-col>
+    
+    </ion-row>
+    <ion-row>
+     
+    </ion-row>
+    
+    </ion-card>
+    </ion-grid>
+    
+    </ion-content>
+       
+    
+    </ion-content>
+    
+        
+      </ng-template>
+    </ion-modal>
+    
