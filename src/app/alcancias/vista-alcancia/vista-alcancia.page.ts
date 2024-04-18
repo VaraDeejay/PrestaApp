@@ -6,6 +6,10 @@ import { AlcanciasService } from 'src/app/Services/alcancias.service';
 import { Alcancias, alcanciasUsuario } from 'src/app/models/models';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { DatePipe } from '@angular/common';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import {User} from 'firebase/auth'
+import { AuthService } from 'src/app/Services/auth.service';
+
 
 @Component({
   selector: 'app-vista-alcancia',
@@ -16,7 +20,12 @@ export class VistaAlcanciaPage implements OnInit {
   turnoSeleccionado: any;
   diferenciaEnDias: any;
 
-  constructor(private datePipe: DatePipe, private firestore: AngularFirestore, public modalCtrl: ModalController, public router: Router, private alcanciasService: AlcanciasService) { }
+  constructor(private authService: AuthService, private afAuth: AngularFireAuth, private datePipe: DatePipe, private firestore: AngularFirestore, public modalCtrl: ModalController, public router: Router, private alcanciasService: AlcanciasService) { }
+  
+  docId: string | undefined;
+  fechaDeturno: Date | undefined;
+  
+  
   alcanciaSeleccionada: any;
   alcancias: any[] = [];
   alcanciasUsuario: alcanciasUsuario = {
@@ -71,38 +80,58 @@ export class VistaAlcanciaPage implements OnInit {
   async detallesAlcancia(alcancia:any){
     this.alcanciaSeleccionada = alcancia;
 
-    
-
     try {
-      await this.modal.present();
-  
-      // Llamar a encontrarPrimerTurnoPosterior para obtener el primer turno posterior
-      const turnosQuerySnapshot = await this.firestore.collection('alcancias').doc(alcancia.id).collection('turnos').get().toPromise();
-      
-  
-      // Manejar el resultado del primer turno posterior encontrado
-      if (turnosQuerySnapshot) {
-        const primerTurnoPosterior = await this.alcanciasService.encontrarPrimerTurnoPosterior(turnosQuerySnapshot);
-        console.log('Primer turno posterior encontrado:', primerTurnoPosterior);
-        if (primerTurnoPosterior) {
-          // Convertir el Timestamp a Date
-          const fechaDeturno = primerTurnoPosterior.data.fechaDeturno.toDate();
-          primerTurnoPosterior.data.fechaDeturno = fechaDeturno;
-
-          this.diferenciaEnDias = this.obtenerDiferenciaEnDias(fechaDeturno);
-          this.turnoSeleccionado = primerTurnoPosterior;
-        }
+        await this.modal.present();
+    
+        // Llamar a encontrarPrimerTurnoPosterior para obtener el primer turno posterior
+        const turnosQuerySnapshot = await this.firestore.collection('alcancias').doc(alcancia.id).collection('turnos').get().toPromise();
         
-        this.turnoSeleccionado = primerTurnoPosterior
-        // Puedes mostrar el turno encontrado en el modal o realizar cualquier otra acción aquí
-      } else {
-        console.log('No se encontró ningún turno posterior.');
-        // Puedes mostrar un mensaje al usuario u otra acción en caso de que no se encuentre ningún turno posterior
-      }
+        // Obtén el usuario actual
+        const currentUser = await this.authService.getUsuario();
+
+        if(currentUser) {
+            const userUid = currentUser.uid;
+
+            // Manejar el resultado del primer turno posterior encontrado
+            if (turnosQuerySnapshot) {
+                const primerTurnoPosterior = await this.alcanciasService.encontrarPrimerTurnoPosterior(turnosQuerySnapshot);
+                console.log('Primer turno posterior encontrado:', primerTurnoPosterior);
+                if (primerTurnoPosterior) {
+                    // Convertir el Timestamp a Date
+                    const fechaDeturno = primerTurnoPosterior.data.fechaDeturno.toDate();
+                    primerTurnoPosterior.data.fechaDeturno = fechaDeturno;
+
+                    this.diferenciaEnDias = this.obtenerDiferenciaEnDias(fechaDeturno);
+                    this.turnoSeleccionado = primerTurnoPosterior;
+
+                    // Iterar sobre los documentos para encontrar el que cumpla la condición
+                    turnosQuerySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        if (data['usuarioId'] === userUid) {
+                          this.docId = doc.id;
+                          this.fechaDeturno = data['fechaDeturno'].toDate(); // Convertir a Date si es un objeto Timestamp
+                          console.log('Documento donde usuarioId es igual al user.uid:', this.docId);
+                          console.log('Fecha de turno:', this.fechaDeturno);
+                            // Puedes mostrar el documento o realizar cualquier otra acción aquí
+                        }
+                    });
+                }
+                
+                this.turnoSeleccionado = primerTurnoPosterior
+                // Puedes mostrar el turno encontrado en el modal o realizar cualquier otra acción aquí
+            } else {
+                console.log('No se encontró ningún turno posterior.');
+                // Puedes mostrar un mensaje al usuario u otra acción en caso de que no se encuentre ningún turno posterior
+            }
+        } else {
+            console.log('No hay usuario logueado.');
+            // Si no hay usuario logueado, muestra un mensaje o realiza otra acción
+        }
     } catch (error) {
-      console.error('Error al mostrar detalles de la alcancía:', error);
+        console.error('Error al mostrar detalles de la alcancía:', error);
     }
-  }
+}
+  
 
   async obtenerDiferenciaEnDias(fechaTurno: Date): Promise<number> {
     const fechaActual = new Date();

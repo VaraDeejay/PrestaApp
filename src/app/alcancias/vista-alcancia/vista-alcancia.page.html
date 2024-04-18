@@ -169,10 +169,10 @@
         </ion-card>
        </ion-col>
        <ion-col size="6">
-        <ion-card>
+        <ion-card *ngIf="docId && fechaDeturno">
           <ion-card-content>
-            <ion-card-title>9 - 26/05</ion-card-title>
-            <ion-card-subtitle>Tu turno-Fecha</ion-card-subtitle>
+            <ion-card-title style="font-size: 18px;">Tu turno: Turno {{docId}} | Fecha:{{fechaDeturno | date}}</ion-card-title>
+            <ion-card-subtitle></ion-card-subtitle>
             <ion-button>Ver turnos</ion-button>
             
           </ion-card-content>
