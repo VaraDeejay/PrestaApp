@@ -6,6 +6,8 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Alcancias, Usuario } from '../models/models';
 import firebase from 'firebase/compat/app';
 import { map } from 'rxjs';
+import {Firestore} from 'firebase/firestore'
+import { QuerySnapshot } from 'firebase/firestore';
 
 
 interface AlcanciasData {
@@ -184,6 +186,97 @@ async obtenerAlcanciasUsuarioActual(): Promise<Alcancia[]> {
     }
   } catch (error) {
     console.error('Error al obtener alcancías del usuario:', error);
+    throw error;
+  }
+}
+
+async obtenerDatosAlcanciasConSubcolecciones(): Promise<any[]> {
+  try {
+    const user = await this.afAuth.currentUser;
+    if (user) {
+      const integranteUid = user.uid;
+      const alcanciasQuerySnapshot = await this.firestore.collection<any>('alcancias').get().toPromise();
+
+      if (alcanciasQuerySnapshot) {
+        const alcanciasData: any[] = [];
+
+        for (const alcanciaDoc of alcanciasQuerySnapshot.docs) {
+          const alcanciaRef = alcanciaDoc.ref;
+          const alcanciaData = alcanciaDoc.data();
+
+          // Obtener datos de la alcancía
+          const alcanciaCompleta = { id: alcanciaDoc.id, ...alcanciaData };
+
+          // Obtener datos de la subcolección 'integrantes'
+          const integrantesQuerySnapshot = await alcanciaRef.collection('integrantes').get();
+
+          if (!integrantesQuerySnapshot.empty) {
+            const integrantesData = integrantesQuerySnapshot.docs.map(doc => doc.data());
+            alcanciaCompleta.integrantes = integrantesData;
+          }
+
+          // Obtener datos de la subcolección 'turnos'
+          const turnosQuerySnapshot = await alcanciaRef.collection('turnos').get();
+
+          if (!turnosQuerySnapshot.empty) {
+            const turnosData = turnosQuerySnapshot.docs.map(doc => doc.data());
+            alcanciaCompleta.turnos = turnosData;
+
+
+
+            const primerTurnoPosterior = await this.encontrarPrimerTurnoPosterior(turnosQuerySnapshot);
+            alcanciaCompleta.primerTurnoPosterior = primerTurnoPosterior;
+          }
+
+          
+
+          // Agregar la alcancía completa al array
+          alcanciasData.push(alcanciaCompleta);
+        }
+
+        console.log('Datos de alcancías con subcolecciones:', alcanciasData);
+        return alcanciasData;
+      } else {
+        throw new Error('No se pudo obtener el snapshot de alcancías');
+      }
+    } else {
+      throw new Error('Usuario no autenticado');
+    }
+  } catch (error) {
+    console.error('Error al obtener datos de alcancías con subcolecciones:', error);
+    throw error;
+  }
+}
+
+async encontrarPrimerTurnoPosterior(turnosQuerySnapshot: firebase.firestore.QuerySnapshot): Promise<any | null> {
+  try {
+    // Obtener la fecha actual
+    const fechaActual = new Date();
+
+    // Iterar sobre los documentos de la subcolección de turnos
+    for (const doc of turnosQuerySnapshot.docs) {
+      const data = doc.data();
+      let fechaTurno: Date;
+
+      // Verificar si fechaDeturno es un Timestamp y convertirlo a Date si es necesario
+      if (data['fechaDeturno'] instanceof firebase.firestore.Timestamp) {
+        fechaTurno = data['fechaDeturno'].toDate();
+      } else {
+        fechaTurno = data['fechaDeturno'];
+      }
+
+      // Verificar si la fecha del turno es posterior a la fecha actual
+      if (fechaTurno > fechaActual) { 
+        console.log('Primer turno posterior encontrado:', doc.id, data);
+        return { id: doc.id, data: data };
+      }
+    }
+
+    // Si no se encuentra ningún turno posterior
+    console.log('No se encontró ningún turno posterior.');
+    return null;
+  } catch (error) {
+    console.error('Error al encontrar el primer turno posterior:', error);
     throw error;
   }
 }

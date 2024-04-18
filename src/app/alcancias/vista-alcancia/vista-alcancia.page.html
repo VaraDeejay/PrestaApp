@@ -149,7 +149,7 @@
     <ion-row>
       <ion-card color="success">
         <ion-card-content>
-      <ion-card-title  style="font-size: 20px;">Dias para proxima cuota: 7</ion-card-title>
+      <ion-card-title  style="font-size: 20px;">Dias para proxima cuota: {{diferenciaEnDias | async}}</ion-card-title>
     </ion-card-content>
     </ion-card>
     </ion-row>
@@ -159,16 +159,16 @@
     <ion-grid>
       
       <ion-row>
-       <ion-col>
-        <ion-card>
+       <ion-col size="6">
+        <ion-card *ngIf="turnoSeleccionado">
           <ion-card-content>
-            <ion-card-title>8/10-25/05</ion-card-title>
-            <ion-card-subtitle>Turno actual: Carolina Amundaray</ion-card-subtitle>
+            <ion-card-title style="font-size: 18px;">Turno {{turnoSeleccionado.id}} de {{alcanciaSeleccionada.alcancia.integrantes}} | Fecha:{{turnoSeleccionado.data.fechaDeturno | date}}</ion-card-title>
+            <ion-card-subtitle>Turno actual:<hr>{{turnoSeleccionado.data.nombre}}</ion-card-subtitle>
             
           </ion-card-content>
         </ion-card>
        </ion-col>
-       <ion-col>
+       <ion-col size="6">
         <ion-card>
           <ion-card-content>
             <ion-card-title>9 - 26/05</ion-card-title>

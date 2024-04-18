@@ -4,6 +4,8 @@ import { IonModal, ModalController } from '@ionic/angular';
 import { Observable, switchMap } from 'rxjs';
 import { AlcanciasService } from 'src/app/Services/alcancias.service';
 import { Alcancias, alcanciasUsuario } from 'src/app/models/models';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-vista-alcancia',
@@ -11,13 +13,16 @@ import { Alcancias, alcanciasUsuario } from 'src/app/models/models';
   styleUrls: ['./vista-alcancia.page.scss'],
 })
 export class VistaAlcanciaPage implements OnInit {
+  turnoSeleccionado: any;
+  diferenciaEnDias: any;
 
-  constructor(public modalCtrl: ModalController, public router: Router, private alcanciasService: AlcanciasService) { }
+  constructor(private datePipe: DatePipe, private firestore: AngularFirestore, public modalCtrl: ModalController, public router: Router, private alcanciasService: AlcanciasService) { }
   alcanciaSeleccionada: any;
   alcancias: any[] = [];
   alcanciasUsuario: alcanciasUsuario = {
     id: '',
   }
+  alcanciacompleta: any [] = [];
   alcancia: Alcancias = {
     alcancia: {
       integrantes: 0,
@@ -44,11 +49,14 @@ export class VistaAlcanciaPage implements OnInit {
 
   async ngOnInit() {
     try {
-      this.alcancias = await this.alcanciasService.obtenerAlcanciasUsuarioActual();
+      this.alcancias = await this.alcanciasService.obtenerDatosAlcanciasConSubcolecciones();
       console.log('Alcancías del usuario actual:', this.alcancias);
     } catch(error) {
       console.error('Error al obtener alcancías del usuario:', error);
-    }
+    };
+
+ 
+    
   }
 
   footerHeight: number = 300; // Altura inicial del footer
@@ -65,8 +73,44 @@ export class VistaAlcanciaPage implements OnInit {
 
     
 
-   await this.modal.present();
+    try {
+      await this.modal.present();
+  
+      // Llamar a encontrarPrimerTurnoPosterior para obtener el primer turno posterior
+      const turnosQuerySnapshot = await this.firestore.collection('alcancias').doc(alcancia.id).collection('turnos').get().toPromise();
+      
+  
+      // Manejar el resultado del primer turno posterior encontrado
+      if (turnosQuerySnapshot) {
+        const primerTurnoPosterior = await this.alcanciasService.encontrarPrimerTurnoPosterior(turnosQuerySnapshot);
+        console.log('Primer turno posterior encontrado:', primerTurnoPosterior);
+        if (primerTurnoPosterior) {
+          // Convertir el Timestamp a Date
+          const fechaDeturno = primerTurnoPosterior.data.fechaDeturno.toDate();
+          primerTurnoPosterior.data.fechaDeturno = fechaDeturno;
+
+          this.diferenciaEnDias = this.obtenerDiferenciaEnDias(fechaDeturno);
+          this.turnoSeleccionado = primerTurnoPosterior;
+        }
+        
+        this.turnoSeleccionado = primerTurnoPosterior
+        // Puedes mostrar el turno encontrado en el modal o realizar cualquier otra acción aquí
+      } else {
+        console.log('No se encontró ningún turno posterior.');
+        // Puedes mostrar un mensaje al usuario u otra acción en caso de que no se encuentre ningún turno posterior
+      }
+    } catch (error) {
+      console.error('Error al mostrar detalles de la alcancía:', error);
+    }
   }
+
+  async obtenerDiferenciaEnDias(fechaTurno: Date): Promise<number> {
+    const fechaActual = new Date();
+    const diferenciaEnTiempo = fechaTurno.getTime() - fechaActual.getTime();
+    const diferenciaEnDias = Math.ceil(diferenciaEnTiempo / (1000 * 3600 * 24));
+    return diferenciaEnDias;
+  }
+  
 
   cerrarDetalles(){
     this.modal.dismiss();
