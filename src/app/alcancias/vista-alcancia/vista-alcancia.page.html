@@ -231,8 +231,8 @@
         <img alt="Silhouette of mountains" src="./assets/img/iconodolarturnos.png" />
       <ion-row>
         <ion-col>
-    <ion-card *ngFor="let turno of turnos" color="success">
-      <ion-card-content>
+    <ion-card class="ion-padding" *ngFor="let turno of turnos" color="success">
+      <ion-card-content class="ion-text-center">
       <ion-card-subtitle>
         Turno {{turno.id}}: {{turno.fechaDeturno.toDate() | date }} 
        
@@ -308,9 +308,10 @@
         <ion-card color="success">
           <ion-card-content>
           <ion-card-subtitle style="text-align: center;">
-            Turno {{turno.id}}: Apr 19, 2024
+            Turno {{turno.id}}: {{turno.fechaDeturno.toDate() | date}}
            
-              <ion-card-title class="custom-input" style="font-size: 16px; text-align: center;">{{turno.nombre}}</ion-card-title>
+           
+         <ion-card-subtitle> <ion-input color="success" [value]="turno.nombre" readonly class="custom-inputinput" style="font-size: 16px; text-align: center;"></ion-input></ion-card-subtitle>
            
           </ion-card-subtitle>
           <ion-card-subtitle>
@@ -323,11 +324,20 @@
         </ion-card>
         <ion-card class="ion-padding">
           <ion-card-content class="ion-text-center">
-            <h2>Monto a debitar:</h2>
-            <ion-item lines="none" class="custom-input">
-              <ion-title style="font-size: 32px; text-align: center; width: 150%" >11350$</ion-title>
-            </ion-item>
-            <ion-button expand="block" color="primary" >Continuar</ion-button>
+            <ion-card-subtitle style="text-align: center;">
+             Monto a debitar ($):
+
+                
+             
+                <ion-input [value]="alcanciaSeleccionada.alcancia.montoCuotas" type="number" class="custom-input" style="font-size: 72px; text-align: center;"></ion-input>
+             
+            </ion-card-subtitle>
+            <ion-card-subtitle>
+             
+              <ion-button (click)="pagarCuota(turno.nombre, alcanciaSeleccionada.alcancia.montoCuotas)" color="success">Pagar</ion-button>
+              
+           
+          </ion-card-subtitle>
           </ion-card-content>
         </ion-card>
         </ion-col>

@@ -167,4 +167,9 @@ ion-content {
     --padding-start: 20px; /* Espacio interno a la izquierda */
     --padding-end: 20px; /* Espacio interno a la derecha */
   }
-  
+  .custom-inputinput {
+    --border-radius: 20px; /* Define el radio de borde para redondear el cuadro de entrada */
+    --background: #a5fd00; /* Color de fondo */
+    --padding-start: 20px; /* Espacio interno a la izquierda */
+    --padding-end: 20px; /* Espacio interno a la derecha */
+  }

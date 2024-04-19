@@ -7,6 +7,7 @@ export interface Usuario {
     dinero: number;
     password: string;
     uid: string;
+    
 
 
     
@@ -70,4 +71,11 @@ export interface turno{
 
 export interface alcanciasUsuario{
     id:string;
+}
+
+export interface ReferenciaPago{
+    tipoDePago: string;
+    alcanciaRef: string;
+    turnoRef: string;
+    
 }

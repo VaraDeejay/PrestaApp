@@ -9,6 +9,8 @@ import { DatePipe } from '@angular/common';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {User} from 'firebase/auth'
 import { AuthService } from 'src/app/Services/auth.service';
+import { EnvioDineroService } from 'src/app/Services/envio-dinero.service';
+import { Usuario } from 'src/app/models/models';
 
 
 @Component({
@@ -21,13 +23,26 @@ export class VistaAlcanciaPage implements OnInit {
   diferenciaEnDias: any;
   diferenciaEnDiasDetalles: number | undefined;
   turno: any;
+  monto!: number;
+  email: any;
+  user : Usuario = {
+    nombres: '',
+    email: '',
+    apellidos: '',
+    cedula: '',
+    foto: '',
+    dinero: 0,
+    password: '',
+    uid: ''
+  }
 
-  constructor(private authService: AuthService, private afAuth: AngularFireAuth, private datePipe: DatePipe, private firestore: AngularFirestore, public modalCtrl: ModalController, public router: Router, private alcanciasService: AlcanciasService) { }
+  constructor(private envioDineroService: EnvioDineroService, private authService: AuthService, private afAuth: AngularFireAuth, private datePipe: DatePipe, private firestore: AngularFirestore, public modalCtrl: ModalController, public router: Router, private alcanciasService: AlcanciasService) { }
   
   docId: string | undefined;
   fechaDeturno: Date | undefined;
   turnos: any [] = [];
   fechaDeturnosDetalles: Date | undefined;
+  remitente : any;
   
   
   alcanciaSeleccionada: any;
@@ -69,6 +84,26 @@ export class VistaAlcanciaPage implements OnInit {
     } catch(error) {
       console.error('Error al obtener alcancías del usuario:', error);
     };
+
+    if (this.user){
+      this.remitente = this.user.nombres
+    }
+
+    this.authService.getUsuario().then((user) =>{
+      if(user){
+        this.user = {
+          nombres: user.nombres ?? '',
+          apellidos: user.apellidos ?? '',
+          cedula: user.cedula ?? '',
+          password:user.password ?? '',
+          foto: user.foto ?? '',
+          dinero: user.dinero ?? '',
+          email: user.email ?? '', 
+          uid: user.uid,
+        }
+        console.log(user);
+      }
+    })
 
  
     
@@ -238,5 +273,26 @@ export class VistaAlcanciaPage implements OnInit {
     }
   }
 
+   async pagarCuota(email: string, monto: number){
+
+    console.log(email, monto, this.user.dinero, this.user)
+    try{
+      if(this.user){ 
+        
+        if(this.user.dinero < this.monto)
+        { 
+          console.log(this.user.dinero, this.monto) 
+          throw new Error ('Fondo Insuficiente')
+          
+        }
+        await this.envioDineroService.enviarDinero(email, monto, this.user);
+        console.log('Dinero enviado exitosamente')
+      } else {
+        console.error('Usuario no autenticado');
+      }
+    } catch(error){
+      console.error('Error al enviar dinero:', error)
+    }
+   }
   
 }
