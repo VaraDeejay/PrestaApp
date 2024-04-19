@@ -31,7 +31,7 @@ export class EnvioDineroService {
 
   constructor(private firestore: AngularFirestore) { }
 
-  async enviarDinero(cedulaDestinatario: string, monto: number, remitente:Usuario): Promise<void> {
+  async enviarDinero(cedulaDestinatario: string, monto: number, remitente:Usuario, alcanciaRef: string, turnoRef : string, tipoDePago : string): Promise<void> {
     try {
       // Buscar al usuario destinatario por su número de cédula
       const destinatarioQuerySnapshot = await this.firestore.collection('usuarios', ref => ref.where('email', '==', cedulaDestinatario)).get().toPromise();
@@ -92,7 +92,10 @@ export class EnvioDineroService {
           
         },
         monto: monto,
-        fecha: new Date().toISOString()
+        fecha: new Date().toISOString(),
+        tipoDePago: tipoDePago,
+        alcanciaRef: alcanciaRef,
+        turnoRef: turnoRef,
       };
   
       

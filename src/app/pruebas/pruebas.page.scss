@@ -170,4 +170,34 @@ ion-content {
     --padding-start: 20px; /* Espacio interno a la izquierda */
     --padding-end: 20px; /* Espacio interno a la derecha */
   }
+
   
+  .horizontal-scroll {
+    overflow-x: scroll;
+    white-space: nowrap;
+    padding-left: 5px;
+    margin-left: 1px;
+    margin-right: 1px;
+    max-width: 100%;
+    max-height: 100%;
+    height: 85%;
+    display: flex;
+  }
+  
+  .scroll-x {
+    overflow-x: scroll;
+    white-space: nowrap; /* Evita que el contenido se ajuste automáticamente */
+  }
+  
+  .scroll-items {
+    display: inline-block; /* Asegura que los elementos estén uno al lado del otro */
+  }
+
+  .gridoption{
+
+    max-width: 100%;
+    height: 50%;
+    
+
+
+  }

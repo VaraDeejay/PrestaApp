@@ -130,7 +130,7 @@ export class HomePage implements OnInit, AfterContentChecked {
       
       }
         this.loading = await this.showLoading(); 
-        await this.envioDineroService.enviarDinero(this.cedulaDestinatario, this.monto, this.user);
+        await this.envioDineroService.enviarDinero(this.cedulaDestinatario, this.monto, this.user, 'Pago directo', 'No aplica', 'No aplica');
         console.log('Dinero enviado exitosamente');
         this.loading.dismiss();
         this.alertaInicio('Continuar');

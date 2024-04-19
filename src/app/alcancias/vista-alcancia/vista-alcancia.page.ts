@@ -123,6 +123,10 @@ export class VistaAlcanciaPage implements OnInit {
 
   @ViewChild('modalPagar')
   modalPagar!: IonModal;
+
+  @ViewChild('modalPagosTurnos')
+  modalPagosTurnos!: IonModal;
+  
   
 
   async detallesAlcancia(alcancia:any){
@@ -240,6 +244,14 @@ export class VistaAlcanciaPage implements OnInit {
     this.modalPagar.present();
   }
 
+  openModalPagosTurnos(){
+    this.modalPagosTurnos.present()
+  }
+
+  cerrarModalPagosTurnos(){
+    this.modalPagosTurnos.dismiss()
+  }
+
   cerrarModalPagar(){
     this.modalPagar.dismiss();
   }
@@ -273,7 +285,7 @@ export class VistaAlcanciaPage implements OnInit {
     }
   }
 
-   async pagarCuota(email: string, monto: number){
+   async pagarCuota(email: string, monto: number, alcanciaRef: string, turnoRef: string ){
 
     console.log(email, monto, this.user.dinero, this.user)
     try{
@@ -285,7 +297,7 @@ export class VistaAlcanciaPage implements OnInit {
           throw new Error ('Fondo Insuficiente')
           
         }
-        await this.envioDineroService.enviarDinero(email, monto, this.user);
+        await this.envioDineroService.enviarDinero(email, monto, this.user, alcanciaRef, turnoRef, 'Pago de cuota alcancia');
         console.log('Dinero enviado exitosamente')
       } else {
         console.error('Usuario no autenticado');
