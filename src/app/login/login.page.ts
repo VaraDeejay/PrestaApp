@@ -19,7 +19,10 @@ export class LoginPage  {
   
   cedulaDestinatario!: string;
   monto!: number;
-  usuario: Usuario = { email: '', password: '', nombres: '', apellidos: '', cedula: '', foto: '', dinero: 0, uid:'' };
+  usuario: Usuario = {
+    email: '', password: '', nombres: '', apellidos: '', cedula: '', foto: '', dinero: 0, uid: '',
+    username: '',
+  };
   
 
 

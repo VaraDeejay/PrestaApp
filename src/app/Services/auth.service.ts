@@ -30,6 +30,7 @@ export class AuthService {
         cedula: user.cedula,
         email: user.email,
         dinero: user.dinero,
+        usuarioId: user.username,
         uid: uid,
         // Añade otros campos según sea necesario
       });

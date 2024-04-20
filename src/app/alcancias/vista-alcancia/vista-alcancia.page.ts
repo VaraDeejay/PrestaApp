@@ -19,6 +19,12 @@ import { Usuario } from 'src/app/models/models';
   styleUrls: ['./vista-alcancia.page.scss'],
 })
 export class VistaAlcanciaPage implements OnInit {
+
+
+  transaccionesTurnos: any;
+
+
+
   turnoSeleccionado: any;
   diferenciaEnDias: any;
   diferenciaEnDiasDetalles: number | undefined;
@@ -33,8 +39,13 @@ export class VistaAlcanciaPage implements OnInit {
     foto: '',
     dinero: 0,
     password: '',
-    uid: ''
+    uid: '',
+    username: undefined
   }
+transacciones: any;
+datosAlcancia: any;
+  currentUser!: Usuario | null;
+  abonado!: number;
 
   constructor(private envioDineroService: EnvioDineroService, private authService: AuthService, private afAuth: AngularFireAuth, private datePipe: DatePipe, private firestore: AngularFirestore, public modalCtrl: ModalController, public router: Router, private alcanciasService: AlcanciasService) { }
   
@@ -99,6 +110,7 @@ export class VistaAlcanciaPage implements OnInit {
           foto: user.foto ?? '',
           dinero: user.dinero ?? '',
           email: user.email ?? '', 
+          username: user.username ?? '',
           uid: user.uid,
         }
         console.log(user);
@@ -132,8 +144,11 @@ export class VistaAlcanciaPage implements OnInit {
   async detallesAlcancia(alcancia:any){
     this.alcanciaSeleccionada = alcancia;
 
+
     try {
         await this.modal.present();
+
+        await this.calcularAbonado();
     
         // Llamar a encontrarPrimerTurnoPosterior para obtener el primer turno posterior
         const turnosQuerySnapshot = await this.firestore.collection('alcancias').doc(alcancia.id).collection('turnos').get().toPromise();
@@ -216,7 +231,50 @@ export class VistaAlcanciaPage implements OnInit {
         console.error('Error al mostrar detalles de la alcancía:', error);
     }
 }
+
+
+pagoTurnosDetalles(){
+   
+
+
+}
+
+
+async calcularAbonado(): Promise<number> {
+  try {
+    // Obtener el usuario actual
+    this.currentUser = await this.authService.getUsuario();
   
+    // Verificar si el usuario está autenticado
+    if (!this.currentUser) {
+      // Manejar el caso cuando el usuario no está autenticado
+      return 0; // O cualquier otro valor predeterminado
+    }
+    
+    // Obtener las transacciones del servicio
+    const transacciones = await this.envioDineroService.buscarTransaccionesPorAlcanciaId(this.alcanciaSeleccionada.id) || [];
+    
+    // Filtrar las transacciones del usuario con alcanciaRef igual al ID de alcanciaSeleccionada
+    const transaccionesUsuario = transacciones.filter((transaccion: any) => {
+      return transaccion.remitente.uid === this.currentUser!.uid && transaccion.alcanciaRef === this.alcanciaSeleccionada.id;
+    });
+
+    // Multiplicar la cantidad de transacciones por el monto de cuotas
+    this.abonado = transaccionesUsuario.length * this.alcanciaSeleccionada.alcancia.montoCuotas;
+
+    console.log(this.abonado)
+
+    // Devolver el abonado
+    return this.abonado;
+  } catch (error) {
+    console.error('Error al calcular el abonado:', error);
+    // Manejar el error según sea necesario
+    return 0; // O cualquier otro valor predeterminado
+  }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async obtenerDiferenciaEnDias(fechaTurno: Date): Promise<number> {
     const fechaActual = new Date();
@@ -244,13 +302,56 @@ export class VistaAlcanciaPage implements OnInit {
     this.modalPagar.present();
   }
 
-  openModalPagosTurnos(){
+  async openModalPagosTurnos(alcanciaSeleccionada: any){
+    console.log(alcanciaSeleccionada.id);
+     
+
+    try{
+       
+      this.datosAlcancia = await this.obtenerDatosAlcanciaConIntegrantes(alcanciaSeleccionada.id)
+
+
+      this.transacciones = await this.envioDineroService.buscarTransaccionesPorAlcanciaId(alcanciaSeleccionada.id);
+      console.log('Transacciones encontradas:', this.transacciones, this.datosAlcancia)
+
+
+
+    } catch (error){
+
+      console.error ('Error al buscar transacciones:', error)
+    }
+
+
+   
+    
+
+
     this.modalPagosTurnos.present()
   }
+
+ 
+  
+
+
+
+
+
+
+
+
+
 
   cerrarModalPagosTurnos(){
     this.modalPagosTurnos.dismiss()
   }
+
+
+
+
+
+
+
+
 
   cerrarModalPagar(){
     this.modalPagar.dismiss();
@@ -306,5 +407,47 @@ export class VistaAlcanciaPage implements OnInit {
       console.error('Error al enviar dinero:', error)
     }
    }
+
+   filtrarTransaccionesPorTurno(turnoId: string): any[] {
+    return this.transacciones.filter((transaccion: any) => transaccion.turnoRef === turnoId);
+  }
+
+
+
+  async obtenerDatosAlcanciaConIntegrantes(alcanciaId: string): Promise<any> {
+    try {
+      // Obtener datos de la alcancía
+      const alcanciaSnapshot = await this.firestore.collection('alcancias').doc(alcanciaId).get().toPromise();
   
+      if (alcanciaSnapshot && !alcanciaSnapshot.exists) {
+        console.error('El documento de la alcancía no existe.');
+        return null;
+      }
+  
+      if (!alcanciaSnapshot) {
+        console.error('No se pudo obtener el documento de la alcancía.');
+        return null;
+      }
+  
+      const alcanciaData = alcanciaSnapshot.data();
+  
+      // Obtener datos de la subcolección 'integrantes'
+      const integrantesSnapshot = await this.firestore.collection('alcancias').doc(alcanciaId).collection('integrantes').get().toPromise();
+  
+      if (!integrantesSnapshot) {
+        console.error('No se pudo obtener la colección de integrantes.');
+        return null;
+      }
+  
+      const integrantesData: any = [];
+      integrantesSnapshot.forEach((doc) => {
+        integrantesData.push({ id: doc.id, ...doc.data() });
+      });
+  
+      return { alcancia: alcanciaData, integrantes: integrantesData };
+    } catch (error) {
+      console.error('Error al obtener datos de la alcancía con integrantes:', error);
+      return null;
+    }
+  }
 }

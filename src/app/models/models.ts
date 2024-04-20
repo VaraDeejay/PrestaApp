@@ -1,4 +1,5 @@
 export interface Usuario {
+    username: any;
     email: string;
     nombres: string;
     apellidos: string;

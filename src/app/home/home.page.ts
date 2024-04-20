@@ -61,6 +61,7 @@ export class HomePage implements OnInit, AfterContentChecked {
           foto: user.foto ?? '',
           dinero: user.dinero ?? '',
           email: user.email ?? '', 
+          username: user.username ?? '',
           uid: user.uid,}
 
         

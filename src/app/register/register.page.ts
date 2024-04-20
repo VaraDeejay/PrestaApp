@@ -19,15 +19,17 @@ export class RegisterPage  {
   loading: any;
 
 
-  usuario : Usuario ={ 
+  usuario : Usuario ={
     email: '',
-   password: '', 
-   nombres: '', 
-   apellidos: '', 
-   cedula: '', 
-   foto: '',
-    dinero: 0, 
-    uid:'' };
+    password: '',
+    nombres: '',
+    apellidos: '',
+    cedula: '',
+    foto: '',
+    dinero: 0,
+    uid: '',
+    username: '',
+  };
 
 
 

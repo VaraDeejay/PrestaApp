@@ -50,8 +50,8 @@ export class AlcanciasService {
    
       };
       const alcanciaRef = await this.alcanciasCollection.add(alcanciaData);
+      
       console.log('ID de la alcancía creada:', alcanciaRef.id);
-
 
 
       const turnosCollection = this.firestore.collection(`alcancias/${alcanciaRef.id}/turnos`);
@@ -65,13 +65,16 @@ export class AlcanciasService {
 
         const turnoData = {
           fechaDeturno: firebase.firestore.Timestamp.fromDate(fechaTurno),
+
+          
           // Otros datos que quieras agregar al turno
         };
 
         await turnosCollection.doc(i.toString()).set(turnoData);
+        
       }
 
-
+   
 
 
     } else {

@@ -22,6 +22,7 @@ export class CrearAlcanciaPage  {
   }
 turnoId!: string;
 selectedTurno: string = '';
+  alcanciaRef: any;
   constructor(private afAuth: AuthService, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private alcanciasService: AlcanciasService, private router: Router,  private modalController: ModalController) { }
 
   selectedSegment: string = 'Crear';
@@ -130,10 +131,12 @@ selectedTurno: string = '';
       this.nuevaAlcancia.alcancia.montoCuotas = this.nuevaAlcancia.alcancia.montoARecibir / this.nuevaAlcancia.alcancia.integrantes;
 
        
-      await this.alcanciasService.crearAlcancia(this.nuevaAlcancia);
-      console.log('Alcancía creada exitosamente');
+      
+      const alcanciaRef = await this.alcanciasService.crearAlcancia(this.nuevaAlcancia);
+      this.alcanciaRef = alcanciaRef;
+      console.log('Alcancía creada exitosamente', this.alcanciaRef);
       this.loading.dismiss();
-      this.alertaCreacion('Continuar')
+      this.alertaCreacion('Continuar', this.alcanciaRef )
       this.router.navigateByUrl('/home')
       this.modal.dismiss()
     
@@ -158,11 +161,11 @@ selectedTurno: string = '';
     return loading;
   }
 
-  async alertaCreacion(message:string){
+  async alertaCreacion(message:string, alcanciaRef: string){
 
     const alert = await this.alertCtrl.create({
       header:'¡Alcancia creada exitosamente!',
-      message: message,
+      message: `${message}\nAlcancia Ref: ${alcanciaRef}`,
       buttons:['Ok']
     });
 
