@@ -12,12 +12,14 @@ import { QuerySnapshot } from 'firebase/firestore';
 
 interface AlcanciasData {
   integrantes: any[];
+  creador: any;
 }
 
 interface Alcancia {
   // Definir la estructura de un documento de alcancia
   // Por ejemplo:
   id: string;
+  
   creador:string;
   // Otros campos de la alcancia
 }
@@ -36,7 +38,7 @@ export class AlcanciasService {
     this.alcanciasCollection = this.firestore.collection('alcancias');
   }
 
-  async crearAlcancia(datosAlcancia: Alcancias): Promise<void> {
+  async crearAlcancia(datosAlcancia: Alcancias): Promise<firebase.firestore.DocumentReference> {
     const user = await this.afAuth.currentUser;
     if (user) {
       const alcanciaData = {
@@ -52,12 +54,10 @@ export class AlcanciasService {
       const alcanciaRef = await this.alcanciasCollection.add(alcanciaData);
       
       console.log('ID de la alcancía creada:', alcanciaRef.id);
+      
 
-
-      const turnosCollection = this.firestore.collection(`alcancias/${alcanciaRef.id}/turnos`);
-
-       // Calcular la fecha de inicio
-       const fechaInicio = new Date(datosAlcancia.alcancia.fechadeinicio);
+     const turnosCollection = this.firestore.collection(`alcancias/${alcanciaRef.id}/turnos`);
+     const fechaInicio = new Date(datosAlcancia.alcancia.fechadeinicio);
 
        for (let i = 1; i <= datosAlcancia.alcancia.integrantes; i++) {
         const fechaTurno = new Date(fechaInicio);
@@ -75,8 +75,8 @@ export class AlcanciasService {
       }
 
    
-
-
+      return alcanciaRef;
+     
     } else {
       throw new Error('Usuario no autenticado');
     }
@@ -159,6 +159,7 @@ async obtenerAlcanciasUsuarioActual(): Promise<Alcancia[]> {
     const user = await this.afAuth.currentUser;
     if (user) {
       const integranteUid = user.uid;
+      const userEmail = user.email;
       const alcanciasQuerySnapshot = await this.firestore.collection<any>('alcancias').get().toPromise();
 
       if (alcanciasQuerySnapshot) {
@@ -175,6 +176,7 @@ async obtenerAlcanciasUsuarioActual(): Promise<Alcancia[]> {
               id: alcanciaDoc.id,
               ...alcanciaDoc.data()
             });
+           
           }
         });
 

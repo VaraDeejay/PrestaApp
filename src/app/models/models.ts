@@ -1,3 +1,5 @@
+import { NumberSymbol } from "@angular/common";
+
 export interface Usuario {
     username: any;
     email: string;
@@ -79,4 +81,16 @@ export interface ReferenciaPago{
     alcanciaRef: string;
     turnoRef: string;
     
+}
+
+export interface Confirmaciones{
+    datos: any;
+
+    fecha: Date;
+    monto: number;
+    referenciaBanco: number;
+    transaccion: string;
+    usuario: string;
+    verificado: boolean;
+    tasa: number;
 }

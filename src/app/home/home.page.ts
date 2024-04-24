@@ -124,9 +124,9 @@ export class HomePage implements OnInit, AfterContentChecked {
     try {
       if (this.user) { if (this.user.dinero < this.monto) {
         this.alertaFondo('Continuar');
-        this.modalCtrl.dismiss();
-        this.dismissSecondModal(),
-        this.dismissThirdModal();
+        this.modal.dismiss();
+        this.secondModal.dismiss();
+        
         throw new Error('Fondo insuficiente. El usuario no tiene suficiente saldo para realizar esta transacción.')
       
       }
@@ -135,9 +135,9 @@ export class HomePage implements OnInit, AfterContentChecked {
         console.log('Dinero enviado exitosamente');
         this.loading.dismiss();
         this.alertaInicio('Continuar');
-        this.modalCtrl.dismiss();
-        this.dismissSecondModal(),
-        this.dismissThirdModal()
+        this.modal.dismiss();
+        this.secondModal.dismiss();
+       
         
       
       } else {
@@ -145,17 +145,19 @@ export class HomePage implements OnInit, AfterContentChecked {
         console.error('Usuario no autenticado');
         this.loading.dismiss();
         this.alertaFalla('Continuar');
-        this.modalCtrl.dismiss();
-        this.dismissSecondModal(),
-        this.dismissThirdModal()
+        this.modal.dismiss();
+        this.secondModal.dismiss();
+       
+        
       }
     } catch (error) {
       console.error('Error al enviar dinero:', error);
         this.loading.dismiss();
         this.alertaFalla('Continuar');
-        this.modalCtrl.dismiss();
-        this.dismissSecondModal(),
-        this.dismissThirdModal()
+        this.modal.dismiss();
+        this.secondModal.dismiss();
+       
+      
       
     }
   }
@@ -257,13 +259,16 @@ export class HomePage implements OnInit, AfterContentChecked {
    
   @ViewChild('RecargarModal') 
   RecargarModal!: IonModal;
+
+  @ViewChild('confirmarRecarga') 
+  confirmarRecargar!: IonModal;
  
   openModalOnEnviarClick(feature: any) {
     if (feature.name === 'Enviar') {
       this.openModal();
     }
     if (feature.name === 'Recargar Billetera') {
-      this.openRecargarModal();
+      this.router.navigateByUrl('/recarga');
     }
 
     if (feature.name === 'Nueva Alcancia') {
@@ -306,6 +311,11 @@ openVistaAlcancia()
     this.RecargarModal.present();
 
   };
+
+  openConfirmarRecarga(){
+    this.router.navigateByUrl('/recarga');
+    this.RecargarModal.dismiss();
+  }
  
  
  
@@ -325,7 +335,9 @@ openVistaAlcancia()
     this.RecargarModal.dismiss();
   }
 
- 
+ cancelConfirmarRecarga(){
+  this.confirmarRecargar.dismiss();
+ }
 
 
 async dismiss() {
@@ -335,14 +347,13 @@ async dismiss() {
   }
 
   async dismissSecondModal() {
-    if (this.secondModal) {
+    
       await this.secondModal.dismiss();
-    }
-  }
   
-  async dismissThirdModal() {
-    if (this.thirdModal) {
-      await this.modal.dismiss();
-    }
- }
+  }
+
+  async confirmarRecarga(){
+      this.cancelConfirmarRecarga();
+  }
+ 
 }

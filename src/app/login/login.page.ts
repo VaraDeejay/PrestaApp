@@ -49,6 +49,13 @@ export class LoginPage  {
   async dismiss() {
     
     await this.modalCtrl.dismiss();
+   
+    
+  }
+  async dismissRegister() {
+    
+    await this.modalCtrl.dismiss();
+    this.router.navigate(['/register'])
     
   }
 

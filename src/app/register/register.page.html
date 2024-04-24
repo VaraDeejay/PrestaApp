@@ -3,24 +3,65 @@
     <ion-icon name="arrow-back-outline"></ion-icon>
   </ion-button>
 
-<ion-card>
-  <ion-title>
-   Registro de Usuario
-  </ion-title>
-</ion-card>
 
 <ion-content color="primary" class="ion-padding">
- <ion-card expand="block" class="ion-margin-top" fill="outline"
- color="white">
+<ion-card expand="block" class="ion-margin-top" fill="outline"
+color="white">
+  <img alt="Silhouette of mountains" src="./assets/img/PrestaIconoNegativo.png" />
+  <ion-card-content>
 
- <ion-input placeholder="Nombres" [(ngModel)]="usuario.nombres" type="text"   class="primary-input" style="margin: 5% 0 0; text-align: center; " required></ion-input>
- <ion-input placeholder="Apellidos" [(ngModel)]="usuario.apellidos" type="text"   class="primary-input" style="margin: 5% 0 0; text-align: center; " required></ion-input>
- <ion-input placeholder="Username" [(ngModel)]="usuario.username" type="text"   class="primary-input" style="margin: 5% 0 0; text-align: center; " required></ion-input>
- <ion-input placeholder="Número de Identificación" [(ngModel)]="usuario.cedula" type="number"   class="primary-input" style="margin: 5% 0 0; text-align: center; " required></ion-input>
-  <ion-input placeholder="Correo Electrónico" type="email" [(ngModel)]="usuario.email"  class="primary-input" style="margin: 5% 0 0; text-align: center; " required></ion-input>
-  <ion-input placeholder="Contraseña" [(ngModel)]="usuario.password" type="password" style="margin: 5% 0 0; text-align: center; " class="primary-input" required></ion-input>
-  <ion-input placeholder="Repita su contraseña" type="password" style="margin: 5% 0 0; text-align: center; " class="primary-input" required></ion-input>
+ 
+ <ion-card-header>
 
+  <ion-card-title class="ion-text-center">Registro:</ion-card-title>
+ </ion-card-header>
+
+
+
+ <ion-grid class="ion-text-center">
+  <ion-row>
+    <ion-card-subtitle class="ion-text-center">Nombres y apellidos:</ion-card-subtitle>
+    <ion-input placeholder="Nombres" [(ngModel)]="usuario.nombres" type="text"   class="primary-input" style="margin: 5% 0 0; text-align: center; " required></ion-input>
+
+  </ion-row>
+
+  <ion-row>
+    
+    <ion-input placeholder="Apellidos" [(ngModel)]="usuario.apellidos" type="text"   class="primary-input" style="margin: 5% 0 0; text-align: center; " required></ion-input>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-card-subtitle>Usuario:</ion-card-subtitle>
+      <ion-input placeholder="Username" [(ngModel)]="usuario.username" type="text"   class="primary-input" style="margin: 5% 0 0; text-align: center; " required></ion-input>
+    </ion-col>
+    <ion-col>
+      <ion-card-subtitle>No. identificación:</ion-card-subtitle>
+      <ion-input placeholder="Cédula o Pasaporte" [(ngModel)]="usuario.cedula" type="number"   class="primary-input" style="margin: 5% 0 0; text-align: center; " required></ion-input>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-card-subtitle>Correo electrónico:</ion-card-subtitle>
+    <ion-input placeholder="Correo Electrónico" type="email" [(ngModel)]="usuario.email"  class="primary-input" style="margin: 5% 0 0; text-align: center; " required></ion-input>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-card-subtitle>Contraseña:</ion-card-subtitle>
+      <ion-input placeholder="Al menos 8 caracteres" [(ngModel)]="usuario.password" type="password" style="margin: 5% 0 0; text-align: center; " class="primary-input" required></ion-input>
+    </ion-col>
+    <ion-col>
+      <ion-card-subtitle>Una vez más:</ion-card-subtitle>
+      <ion-input placeholder="Repita su contraseña" type="password" style="margin: 5% 0 0; text-align: center; " class="primary-input" required></ion-input>
+    </ion-col>
+  </ion-row>
+
+ 
+
+ 
+
+  
+  
+  
+</ion-grid>
 
   <div class="ion-margin-top ion-text-center forget;" >
     <a>Acepto las condiciones</a>
@@ -28,9 +69,10 @@
 
   
   <div class="ion-margin-top">
-    <ion-button (click)="registrarUsuario()" color="warning" expand="block" style="font-size: 15px; margin: 5% 10% 10% "  [disabled]="!usuario.email || !usuario.password || !usuario.nombres || !usuario.apellidos ||!usuario.cedula ">REGISTRARSE</ion-button>
+    <ion-button (click)="registrarUsuario()" color="tertiary" expand="block" style="font-size: 15px; margin: 5% 10% 10% "  [disabled]="!usuario.email || !usuario.password || !usuario.nombres || !usuario.apellidos ||!usuario.cedula ||!usuario.username ">REGISTRARSE</ion-button>
   </div>
-
-</ion-card>
-</ion-content>
+         
+      </ion-card-content>
+   </ion-card>
+  </ion-content>
 </ion-content>

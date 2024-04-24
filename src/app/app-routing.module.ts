@@ -41,6 +41,14 @@ const routes: Routes = [
     path: 'pruebas',
     loadChildren: () => import('./pruebas/pruebas.module').then( m => m.PruebasPageModule)
   },
+  {
+    path: 'retiro',
+    loadChildren: () => import('./retiro/retiro.module').then( m => m.RetiroPageModule)
+  },
+  {
+    path: 'recarga',
+    loadChildren: () => import('./recarga/recarga.module').then( m => m.RecargaPageModule)
+  },
 ];
 
 @NgModule({

@@ -44,7 +44,7 @@
 
 ion-list.transactions {
     border-radius: 8vh 8vh 0 0;
-    background: var(--ion-color-dark);
+    background: #a5e65a;
     padding-bottom: 10vh;
     ion-list-header {
         padding-inline-start: 3.5vh;
@@ -107,9 +107,9 @@ ion-list.transactions {
 }
 
 .primary-input {
-    background: aliceblue;
+    background: rgb(185, 247, 255);
     --padding-start: 10px !important;
-    color: #999999;
-    border-radius: 5px;
+    color: #006699;
+    border-radius: 10px;
     margin-bottom: 10px;
 }

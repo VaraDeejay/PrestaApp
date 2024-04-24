@@ -11,6 +11,8 @@ import {User} from 'firebase/auth'
 import { AuthService } from 'src/app/Services/auth.service';
 import { EnvioDineroService } from 'src/app/Services/envio-dinero.service';
 import { Usuario } from 'src/app/models/models';
+import { LoadingController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 
 
 @Component({
@@ -46,8 +48,9 @@ transacciones: any;
 datosAlcancia: any;
   currentUser!: Usuario | null;
   abonado!: number;
+  loading: any; 
 
-  constructor(private envioDineroService: EnvioDineroService, private authService: AuthService, private afAuth: AngularFireAuth, private datePipe: DatePipe, private firestore: AngularFirestore, public modalCtrl: ModalController, public router: Router, private alcanciasService: AlcanciasService) { }
+  constructor(public alertCtrl: AlertController, public loadingCtrl: LoadingController, private envioDineroService: EnvioDineroService, private authService: AuthService, private afAuth: AngularFireAuth, private datePipe: DatePipe, private firestore: AngularFirestore, public modalCtrl: ModalController, public router: Router, private alcanciasService: AlcanciasService) { }
   
   docId: string | undefined;
   fechaDeturno: Date | undefined;
@@ -90,6 +93,7 @@ datosAlcancia: any;
 
   async ngOnInit() {
     try {
+      
       this.alcancias = await this.alcanciasService.obtenerAlcanciasUsuarioActual();
       console.log('Alcancías del usuario actual:', this.alcancias);
     } catch(error) {
@@ -390,21 +394,32 @@ async calcularAbonado(): Promise<number> {
 
     console.log(email, monto, this.user.dinero, this.user)
     try{
+
+      this.loading = await this.showLoading();
       if(this.user){ 
         
         if(this.user.dinero < this.monto)
         { 
+          this.loading.dismiss();
+          this.alertaFondo('Continuar')
           console.log(this.user.dinero, this.monto) 
           throw new Error ('Fondo Insuficiente')
           
         }
         await this.envioDineroService.enviarDinero(email, monto, this.user, alcanciaRef, turnoRef, 'Pago de cuota alcancia');
         console.log('Dinero enviado exitosamente')
+        this.loading.dismiss()
+        this.alertaEnvio('Continuar')
+        this.modalPagar.dismiss();
       } else {
         console.error('Usuario no autenticado');
+        this.loading.dismiss()
+        this.alertaEnvio('Continuar')
       }
     } catch(error){
       console.error('Error al enviar dinero:', error)
+      this.loading.dismiss();
+      this.alertaFalla('Continuar')
     }
    }
 
@@ -412,7 +427,48 @@ async calcularAbonado(): Promise<number> {
     return this.transacciones.filter((transaccion: any) => transaccion.turnoRef === turnoId);
   }
 
+  async showLoading() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Enviando Dinero...',
+      
+    });
 
+    await loading.present();
+
+    return loading;
+  }
+
+  async alertaEnvio(message:string){
+
+    const alert = await this.alertCtrl.create({
+      header:'¡Dinero enviado exitosamente!',
+      message: message,
+      buttons:['Ok']
+    });
+
+    await alert.present();
+  }
+
+  async alertaFalla(message:string){
+
+    const alert = await this.alertCtrl.create({
+      header:'Ha ocurrido un error, verique los datos',
+      message: message,
+      buttons:['Ok']
+    });
+
+    await alert.present();
+  }
+  async alertaFondo(message:string){
+
+    const alert = await this.alertCtrl.create({
+      header:'Usted no posee fondos suficientes para esta operación',
+      message: message,
+      buttons:['Ok']
+    });
+
+    await alert.present();
+  }
 
   async obtenerDatosAlcanciaConIntegrantes(alcanciaId: string): Promise<any> {
     try {

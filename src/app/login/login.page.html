@@ -3,22 +3,20 @@
     <ion-icon name="arrow-back-outline"></ion-icon>
   </ion-button>
 
-<ion-card color="primary">
-  <ion-title>
-    <img src="assets/imgs/Prestapp Logo.png">
-  </ion-title>
-</ion-card>
 
 <ion-content color="primary" class="ion-padding">
  <ion-card expand="block" class="ion-margin-top" fill="outline"
  color="white">
+ <img alt="Silhouette of mountains" src="./assets/img/PrestaIconoNegativo.png" />
+ <ion-card-content>
+  
+  <ion-card-header>
+    <ion-card-title style="font-size: 18px;" class="ion-text-center">¡Bienvenido!</ion-card-title>
+  </ion-card-header>
 
-  <ion-title>
-    <img src="assets/imgs/PrestaApp Logo.png" alt="">
-  </ion-title>
 
-  <ion-input placeholder="Email" type="email"  [(ngModel)]="usuario.email" class="primary-input" style="margin: 5% 0 0; text-align: center; " required></ion-input>
-  <ion-input placeholder="Password" [(ngModel)]="usuario.password" type="password" style="margin: 5% 0 0; text-align: center; " class="primary-input" required></ion-input>
+  <ion-input color="primary" placeholder="Email" type="email"  [(ngModel)]="usuario.email" class="primary-input" style="margin: 5% 0 0; text-align: center; " required></ion-input>
+  <ion-input color="primary" placeholder="Password" [(ngModel)]="usuario.password" type="password" style="margin: 5% 0 0; text-align: center; " class="primary-input" required></ion-input>
 
   <div class="ion-margin-top ion-text-center forget;" >
     <a>Olvidé mi contraseña</a>
@@ -26,12 +24,12 @@
 
   <div class="ion-margin-top">
     <ion-button color="warning" expand="block" class="ion-margin-top"
-    color="warning" style="font-size: 15px; margin: 5% 10% 2% " expand="block" [disabled]="!usuario.email || !usuario.password" (click)="login()">INGRESA</ion-button>
+    color="tertiary" style="font-size: 15px; margin: 5% 10% 2% " expand="block" [disabled]="!usuario.email || !usuario.password" (click)="login()">INGRESA</ion-button>
   </div>
   <div class="ion-margin-top">
-    <ion-button color="DARK" expand="block" style="font-size: 15px; margin: 5% 10% 10% " routerLink="/register">REGISTRARSE</ion-button>
+    <ion-button color="DARK" expand="block" style="font-size: 15px; margin: 5% 10% 10% " (click)="dismissRegister()">REGISTRARSE</ion-button>
   </div>
-
+</ion-card-content>
 </ion-card>
 </ion-content>
 </ion-content>

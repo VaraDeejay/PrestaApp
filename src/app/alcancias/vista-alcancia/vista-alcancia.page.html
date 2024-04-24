@@ -10,13 +10,13 @@
   <ion-toolbar color="primary">
     <ion-title mode="md" class="ion-no-padding">
       <ion-label >
-        <ion-text color="warning">Estas son tus</ion-text>
+        <ion-text color="secondary">Estas son tus</ion-text>
         <p><ion-text color="white"><strong>Alcancias</strong></ion-text></p>
         
       </ion-label>
     </ion-title>
     <ion-avatar slot="end">
-      <img src="assets/imgs/Prestapp Logo.png" />
+      <img src="./assets/img/PrestaIconoPositivo.png" />
     </ion-avatar>
   </ion-toolbar>
 </ion-header>
@@ -29,7 +29,7 @@
 <ion-content scrollY="true" mode="ios" color="primary">
 
   
- <ion-searchbar placeholder="Buscar alcancia por id"></ion-searchbar>
+ 
 
  <ion-card color="primary" class="banners">
 
@@ -38,7 +38,7 @@
   
 
   <ion-card  *ngFor="let alcancia of alcancias" class="custom-card" (click)="detallesAlcancia(alcancia)">
-    <img alt="Silhouette of mountains" src="./assets/img/iconodolaraldia.png" />
+    <img alt="Silhouette of mountains" src="./assets/img/PrestaAlcancia.png" />
     <ion-card-header  >
       <ion-card-title style="font-size: 10px;" >Administrador</ion-card-title>
       <ion-card-subtitle>{{alcancia.creador.id}}</ion-card-subtitle>
@@ -62,15 +62,15 @@
       </ion-list>
     </ion-card-content>
   </ion-card>
+  
 </div>
 
 
 
 </ion-card>
+<img src="./assets/img/PrestaLogoPositivo.png" alt="">
 
-<ion-card class="custom-datetime">
-  <ion-datetime></ion-datetime>
-</ion-card>
+
 
 </ion-content>
 
@@ -78,7 +78,7 @@
   
 
 
-<ion-modal md="ios" #modal>
+<ion-modal mode="ios" #modal>
   <ng-template>
     <ion-header color="primary">
       <ion-toolbar color="primary">
@@ -92,13 +92,13 @@
       <ion-toolbar color="primary">
         <ion-title mode="md" class="ion-no-padding">
           <ion-label >
-            <ion-text color="warning">Detalles</ion-text>
+            <ion-text color="secondary">Detalles</ion-text>
             <p><ion-text color="white"><strong>Alcancia</strong></ion-text></p>
             
           </ion-label>
         </ion-title>
         <ion-avatar slot="end">
-          <img src="assets/imgs/Prestapp Logo.png" />
+          <img src="./assets/img/PrestaIconoPositivo.png" />
         </ion-avatar>
       </ion-toolbar>
     </ion-header>
@@ -111,7 +111,7 @@
     <ion-grid>
       
       <ion-card>
-        <img alt="Silhouette of mountains" src="./assets/img/iconodolar.png" />
+        <img alt="Silhouette of mountains" src="./assets/img/PrestaAlcancia.png" />
       <ion-row>
         <ion-col>
     <ion-card>
@@ -209,13 +209,13 @@
       <ion-toolbar color="primary">
         <ion-title mode="md" class="ion-no-padding">
           <ion-label >
-            <ion-text color="warning">Detalles</ion-text>
+            <ion-text color="secondary">Detalles</ion-text>
             <p><ion-text color="white"><strong>Turnos</strong></ion-text></p>
             
           </ion-label>
         </ion-title>
         <ion-avatar slot="end">
-          <img src="assets/imgs/Prestapp Logo.png" />
+          <img src="./assets/img/PrestaIconoPositivo.png" />
         </ion-avatar>
       </ion-toolbar>
     </ion-header>
@@ -228,7 +228,7 @@
     <ion-grid>
       
       <ion-card>
-        <img alt="Silhouette of mountains" src="./assets/img/iconodolarpagarcuota.png" />
+        <img alt="Silhouette of mountains" src="./assets/img/PrestaEnviar.png" />
       <ion-row>
         <ion-col>
     <ion-card class="ion-padding" *ngFor="let turno of turnos" color="success">
@@ -283,13 +283,13 @@
           <ion-toolbar color="primary">
             <ion-title mode="md" class="ion-no-padding">
               <ion-label >
-                <ion-text color="warning">Detalles</ion-text>
-                <p><ion-text color="white"><strong>Turnos</strong></ion-text></p>
+                <ion-text color="secondary">Pagar</ion-text>
+                <p><ion-text color="white"><strong>Cuotas</strong></ion-text></p>
                 
               </ion-label>
             </ion-title>
             <ion-avatar slot="end">
-              <img src="assets/imgs/Prestapp Logo.png" />
+              <img src="./assets/img/PrestaIconoPositivo.png" />
             </ion-avatar>
           </ion-toolbar>
         </ion-header>
@@ -302,7 +302,7 @@
         <ion-grid>
           
           <ion-card>
-            <img alt="Silhouette of mountains" src="./assets/img/iconodolarpagarcuota.png" />
+            <img alt="Silhouette of mountains" src="./assets/img/PrestaEnviar.png" />
           <ion-row>
             <ion-col>
         <ion-card color="success">
@@ -382,13 +382,13 @@
           <ion-toolbar color="primary">
             <ion-title mode="md" class="ion-no-padding">
               <ion-label >
-                <ion-text color="warning">Detalles</ion-text>
+                <ion-text color="secondary">Detalles</ion-text>
                 <p><ion-text color="white"><strong>Turnos</strong></ion-text></p>
                 
               </ion-label>
             </ion-title>
             <ion-avatar slot="end">
-              <img src="assets/imgs/Prestapp Logo.png" />
+              <img src="./assets/img/PrestaIconoPositivo.png" />
             </ion-avatar>
           </ion-toolbar>
         </ion-header>
@@ -402,7 +402,7 @@
           
           <ion-card> 
             <ion-card-header>
-            <img alt="Silhouette of mountains" src="./assets/img/iconodolarturnos.png" /></ion-card-header>
+            <img alt="Silhouette of mountains" src="./assets/img/PrestaTurnosAlcancia.png" /></ion-card-header>
             
             
           <ion-row color="primary" class="scroll-x">
@@ -433,7 +433,7 @@
             <ion-card-subtitle *ngIf="filtrarTransaccionesPorTurno(turno.id).length > 0"  color="success" style="text-align: center;">
              Pagos registrados:
              
-                <ion-card-title *ngFor="let transaccion of filtrarTransaccionesPorTurno(turno.id)"  class="custom-input" style="font-size: 14px; text-align: center;">{{transaccion.remitente.nombre}}</ion-card-title>
+                <ion-card-title *ngFor="let transaccion of filtrarTransaccionesPorTurno(turno.id)"  class="custom-input" style="font-size: 14px; text-align: center;">{{transaccion.remitente.nombres}}</ion-card-title>
              
             </ion-card-subtitle>
           </ion-card-content></ion-card>
@@ -443,7 +443,7 @@
               Integrantes:
               
                  <ion-card-title *ngFor="let integrante of datosAlcancia.integrantes" class="custom-input" style="font-size: 14px; text-align: center;"
-                 >{{integrante.id}}</ion-card-title>
+                 >{{integrante.nombres}}</ion-card-title>
                  
               
              </ion-card-subtitle>

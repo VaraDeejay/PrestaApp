@@ -56,8 +56,9 @@ export class RegisterPage  {
  
 
   async dismiss() {
-    
+    this.router.navigate(['/welcome']);
     await this.modalCtrl.dismiss();
+   
     
   }
 
