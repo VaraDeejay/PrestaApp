@@ -1,13 +1,64 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>retiro</ion-title>
+<ion-header color="primary">
+  <ion-toolbar color="primary">
+    <ion-buttons color="secondary" slot="start">
+      <ion-button color="tertiary" (click)="cerrarRetiro()" ><ion-icon name="arrow-back-outline"></ion-icon></ion-button>
+    </ion-buttons>
+    
+  </ion-toolbar>
+</ion-header>
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-title mode="md" class="ion-no-padding">
+      <ion-label >
+        <ion-text color="secondary">Retiro</ion-text>
+        <p><ion-text color="white"><strong>Fondos</strong></ion-text></p>
+        
+      </ion-label>
+    </ion-title>
+    <ion-avatar slot="end">
+      <img src="./assets/img/PrestaIconoNegativo.png" />
+    </ion-avatar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">retiro</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content mode="ios" color="primary">
+ 
+<ion-card color="primary">
+  
+
+
+<ion-card-content>
+  <ion-card-title style="font-size: 18px;" class="ion-text-center">
+    Monto a retirar ($):
+  </ion-card-title>
+  <ion-input [(ngModel)]="nuevoRetiro.monto" color="tertiary" type="number" class="custom-input" style="font-size: 72px; text-align: center;"></ion-input>
+  <ion-card color="white">
+    <ion-card-header>Por favor, coloque sus datos de retiro:</ion-card-header>
+    <ion-card-content>
+      <ion-card-title>
+        <ion-input [(ngModel)]="nuevoRetiro.banco" class="custom-input" style="font-size: 12px;">Código de banco (01xx)</ion-input>
+      </ion-card-title>
+      <ion-card-title>
+        <ion-input [(ngModel)]="nuevoRetiro.telefono" class="custom-input" style="font-size: 12px;">Número de télefono (+58)</ion-input>
+      </ion-card-title>
+      
+      <ion-card-title>
+        <ion-input [(ngModel)]="nuevoRetiro.cedula" class="custom-input" style="font-size: 12px;">Número de cédula (V - E)</ion-input>
+      </ion-card-title>
+     
+      
+    </ion-card-content>
+  </ion-card>
+  <h2>Usted recibirá el monto en Bolivares, a los datos colocados, siendo la tasa de cambio, la tasa del dia del Banco Central de Venezuela. <hr>Comisión de retiro: 0,95%</h2>
+
+  <ion-button expand="block" color="secondary" class="ion-text-center" (click)="confirmarRetiro()"  slot="center">Confirmar</ion-button>
+  
+</ion-card-content>
+<img src="./assets/img/PrestaRetirar.png" alt="">
+</ion-card> 
+  
+
+
 </ion-content>
+
+

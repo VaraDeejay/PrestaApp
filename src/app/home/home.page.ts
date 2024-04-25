@@ -74,8 +74,8 @@ export class HomePage implements OnInit, AfterContentChecked {
 
     
     this.accounts = [
-      { id: 1, acc_no: 'Alcancía', balance: '200000' },
-      { id: 2, acc_no: 'Disponible para prestamos', balance: '50000' },
+      { id: 1, acc_no: 'Billetera', balance: '200000' },
+      { id: 2, acc_no: 'Billetera', balance: '50000' },
     
     ];
     this.features = [
@@ -83,7 +83,8 @@ export class HomePage implements OnInit, AfterContentChecked {
       
       { id: 3, color: 'white', icon: 'add-circle', name: 'Nueva Alcancia' },
       { id: 4, color: 'white', icon: 'newspaper', name: 'Alcancias' },
-      { id: 5, color: 'white', icon: 'card', name: 'Recargar Billetera' },
+      { id: 5, color: 'white', icon: 'duplicate', name: 'Recargar Billetera' },
+      { id: 6, color: 'white', icon: 'exit', name: 'Retiro de fondos' },
     ];
     this.transactions = [
       { id: 1, to: 'Daniela Pérez', date: '2022-05-22', amount: 5000 },
@@ -98,7 +99,7 @@ export class HomePage implements OnInit, AfterContentChecked {
       pagination: { clickable: true }
     };
     this.featureConfig = {
-      slidesPerView: 4,
+      slidesPerView: 5,
     };
   }
 
@@ -278,6 +279,10 @@ export class HomePage implements OnInit, AfterContentChecked {
     if (feature.name === 'Alcancias') {
       this.openVistaAlcancia();
     }
+
+    if (feature.name === 'Retiro de fondos') {
+      this.router.navigateByUrl('/retiro');
+    }
     
   }
 
@@ -318,7 +323,11 @@ openVistaAlcancia()
   }
  
  
+  cerrarRetiro(){
+    this.router.navigateByUrl('/home')
+  }
  
+
   cancel() {
     this.modal.dismiss();
   }

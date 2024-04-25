@@ -4,7 +4,7 @@
       <ion-label *ngIf="user">
         <ion-text color="secondary">¡Hola!</ion-text>
         <p><ion-text color="white"><strong>{{user.nombres}}</strong></ion-text></p>
-        <p><ion-text color="secondary"><strong>Nivel 1</strong></ion-text></p>
+        
       </ion-label>
     </ion-title>
     <ion-avatar slot="end">
@@ -70,7 +70,7 @@
           <img [src]="'assets/imgs/' + (transaction.monto >= 0 ? 'up-right.png' : 'down-left-arrow.png')" />
         </ion-thumbnail>
         <ion-label>
-          <ion-text color="tertiary">
+          <ion-text color="white">
             {{ transaction.destinatario?.cedula !== user?.cedula ? transaction.destinatario?.nombres : (transaction?.remitente?.nombres ? transaction.remitente.nombres : 'Nombre del remitente desconocido') }}
           </ion-text>
           <p>

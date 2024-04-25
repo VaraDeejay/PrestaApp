@@ -94,3 +94,11 @@ export interface Confirmaciones{
     verificado: boolean;
     tasa: number;
 }
+
+export interface Retiro{
+    monto: number;
+    banco: number;
+    telefono: number;
+    cedula:number;
+    
+}
