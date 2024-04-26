@@ -33,8 +33,9 @@
 
  <ion-card color="primary" class="banners">
 
-
+  <ion-card-title class="ion-text-center" style="font-size: 18px;">Dinero</ion-card-title>
   <div class="card-container">
+    
   
 
   <ion-card  *ngFor="let alcancia of alcancias" class="custom-card" (click)="detallesAlcancia(alcancia)">
@@ -45,6 +46,7 @@
     </ion-card-header>
   
     <ion-card-content>
+
       <ion-list>
         <ion-item  style="font-size: 16px;">
           <strong>Recibes: ${{alcancia.alcancia.montoARecibir}}</strong>
@@ -68,6 +70,48 @@
 
 
 </ion-card>
+
+
+
+<ion-card color="primary" class="banners">
+
+  <ion-card-title class="ion-text-center" style="font-size: 18px;">Productos</ion-card-title>
+  <div class="card-container">
+   
+  
+
+  <ion-card  *ngFor="let alcancias of alcanciasProductos" class="custom-card" (click)="detallesAlcancia(alcancia)">
+    <img alt="Silhouette of mountains" src="./assets/img/PrestaAlcancia.png" />
+    <ion-card-header  >
+      <ion-card-title style="font-size: 10px;" >Administrador</ion-card-title>
+      <ion-card-subtitle>{{alcancias.creador.id}}</ion-card-subtitle>
+    </ion-card-header>
+  
+    <ion-card-content>
+
+      <ion-list>
+        <ion-item  style="font-size: 16px;">
+          <strong>Costo del Producto: ${{alcancias.alcancia.costoProducto}}</strong>
+        </ion-item>
+        
+        <ion-item  style="font-size: 12px;">
+          Cuotas: ${{alcancias.alcancia.montoCuotas}}
+        </ion-item>
+        <ion-item  style="font-size: 12px;">
+          Integrantes: {{alcancias.alcancia.integrantes}}
+        </ion-item>
+        <ion-item  style="font-size: 12px;">
+          Pago cada {{alcancias.alcancia.modalidad}} días.
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  
+</div>
+
+
+
+</ion-card>
 <img src="./assets/img/PrestaLogoPositivo.png" alt="">
 
 
@@ -76,6 +120,16 @@
 
 
   
+
+
+
+
+
+
+
+
+
+
 
 
 <ion-modal mode="ios" #modal>

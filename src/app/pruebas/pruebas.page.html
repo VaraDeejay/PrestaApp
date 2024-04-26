@@ -29,32 +29,47 @@
 
 <ion-card-content>
   <ion-card-title style="font-size: 18px;" class="ion-text-center">
-    Monto a retirar ($):
+    Costo del producto ($):
   </ion-card-title>
   <ion-input color="tertiary" type="number" class="custom-input" style="font-size: 72px; text-align: center;"></ion-input>
   <ion-card color="white">
-    <ion-card-header>Por favor, coloque sus datos de retiro:</ion-card-header>
+    <ion-card-header>Datos de la alcancia:</ion-card-header>
     <ion-card-content>
       <ion-card-title>
-        <ion-input class="custom-input" style="font-size: 12px;">Código de banco (01xx)</ion-input>
+        <ion-input placeholder="Ej. Tv 42Pulgadas Smart Tv" class="custom-input" style="font-size: 12px;">Descripción del producto</ion-input>
       </ion-card-title>
       <ion-card-title>
-        <ion-input class="custom-input" style="font-size: 12px;">Número de télefono (+58)</ion-input>
+        <ion-input placeholder="Copia y pega el link aqui" class="custom-input" style="font-size: 12px;">Url de foto referencial del producto</ion-input>
+      </ion-card-title>
+      <ion-card-title style="font-size: 12px;">Modalidad de pago
+        <ion-select type="number" placeholder="Seleccione la modalidad" class="custom-input" style="font-size: 12px;">
+          <ion-select-option value=7>Semanal</ion-select-option>
+          <ion-select-option value=15>Quincenal</ion-select-option>
+          <ion-select-option value=30>Mensual</ion-select-option>
+        </ion-select>
       </ion-card-title>
       
-      <ion-card-title>
-        <ion-input class="custom-input" style="font-size: 12px;">Número de cédula (V - E)</ion-input>
+      <ion-card-title style="font-size: 12px;">Numero de integrantes
+        <ion-select type="number" placeholder="Seleccione (max 15)" class="custom-input" style="font-size: 12px;">
+          <ion-select-option value=2>2</ion-select-option>
+          <ion-select-option value=4>4</ion-select-option>
+          <ion-select-option value=6>6</ion-select-option>
+          <ion-select-option value=8>8</ion-select-option>
+          <ion-select-option value=10>10</ion-select-option>
+          <ion-select-option value=12>12</ion-select-option>
+          <ion-select-option value=15>15</ion-select-option>
+        </ion-select>
       </ion-card-title>
      
       
     </ion-card-content>
   </ion-card>
-  <h2>Usted recibirá el monto en Bolivares, a los datos colocados, siendo la tasa de cambio, la tasa del dia del Banco Central de Venezuela. <hr>Comisión de retiro: 0,95%</h2>
+  <h2>Al crear la alcancia, adquieres un compromiso de entregar el producto al integrante cuando corresponda su turno. <hr>La cantidad de integrantes sera igual a la cantidad de cuotas por pagar.</h2>
 
   <ion-button expand="block" color="secondary" class="ion-text-center"  slot="center">Confirmar</ion-button>
   
 </ion-card-content>
-<img src="./assets/img/PrestaRetirar.png" alt="">
+
 </ion-card> 
   
 

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { IonModal, ModalController } from '@ionic/angular';
 import { Observable, switchMap } from 'rxjs';
 import { AlcanciasService } from 'src/app/Services/alcancias.service';
-import { Alcancias, alcanciasUsuario } from 'src/app/models/models';
+import { Alcancias, alcanciasUsuario, AlcanciaProducto } from 'src/app/models/models';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { DatePipe } from '@angular/common';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
@@ -58,7 +58,7 @@ datosAlcancia: any;
   fechaDeturnosDetalles: Date | undefined;
   remitente : any;
   
-  
+  alcanciasProductos: any [] = [];
   alcanciaSeleccionada: any;
   alcancias: any[] = [];
   alcanciasUsuario: alcanciasUsuario = {
@@ -95,7 +95,10 @@ datosAlcancia: any;
     try {
       
       this.alcancias = await this.alcanciasService.obtenerAlcanciasUsuarioActual();
+      this.alcanciasProductos = await this.alcanciasService.obtenerAlcanciasProductosUsuarioActual();
+      
       console.log('Alcancías del usuario actual:', this.alcancias);
+      console.log('Alcancias de Productos del usuario', this.alcanciasProductos)
     } catch(error) {
       console.error('Error al obtener alcancías del usuario:', error);
     };
@@ -117,7 +120,7 @@ datosAlcancia: any;
           username: user.username ?? '',
           uid: user.uid,
         }
-        console.log(user);
+        
       }
     })
 

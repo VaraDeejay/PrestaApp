@@ -102,3 +102,25 @@ export interface Retiro{
     cedula:number;
     
 }
+
+export interface AlcanciaProducto{
+
+    creador: {
+
+        nombres: string;
+        uid: string;
+
+    }
+
+    alcancia: {
+        integrantes: number;
+        costoProducto: number;
+        cuotas: number;
+        modalidad: number;
+        montoCuotas: number;
+        fechadeinicio: Date;
+        url: string;
+        nombreProducto: string;
+        
+    }
+}

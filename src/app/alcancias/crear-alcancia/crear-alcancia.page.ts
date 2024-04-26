@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertInput, IonModal, ModalController } from '@ionic/angular';
 import { AlcanciasService } from 'src/app/Services/alcancias.service';
-import { Alcancias, turno } from 'src/app/models/models';
+import { AlcanciaProducto, Alcancias, turno } from 'src/app/models/models';
 import { Usuario } from 'src/app/models/models';
 import { LoadingController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
@@ -23,6 +23,7 @@ export class CrearAlcanciaPage  {
 turnoId!: string;
 selectedTurno: string = '';
   alcanciaRef: any;
+  configuraProducto: boolean = false;
   constructor(private afAuth: AuthService, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private alcanciasService: AlcanciasService, private router: Router,  private modalController: ModalController) { }
 
   selectedSegment: string = 'Crear';
@@ -58,6 +59,24 @@ selectedTurno: string = '';
   usuario!: Usuario;
   idAlcancia!: string;
 
+  nuevaAlcanciaProductos: AlcanciaProducto = {
+    alcancia: {
+      integrantes: 0,
+      costoProducto: 0,
+      cuotas: 0,
+      modalidad: 0,
+      montoCuotas: 0,
+      fechadeinicio: new Date() ,
+      url: '',
+      nombreProducto: '',
+    },
+    creador: {
+      nombres: '',
+      
+      uid: ''
+    }
+  };
+
   nuevaAlcancia: Alcancias = {
     alcancia: {
       integrantes: 0,
@@ -86,6 +105,10 @@ selectedTurno: string = '';
     this.configuraAlcancia = true;
   } 
 
+  openConfiguraProducto(){
+    this.configuraProducto = true;
+  }
+
   openResume(){
     this.calcularMontoSemanal();
     this.resumeAlcancia = true
@@ -102,6 +125,33 @@ selectedTurno: string = '';
   @ViewChild('modalTurno')
   modalTurno!: IonModal;
 
+  @ViewChild('modalProductos')
+  modalProductos!: IonModal;
+  
+  @ViewChild('modalUnirseIntercambio')
+  modalUnirseIntercambio!: IonModal;
+
+  @ViewChild('modalUnirseProductos')
+  modalUnirseProductos!: IonModal;
+
+  @ViewChild('modalTurnoProductos')
+  modalTurnoProductos!: IonModal;
+
+ openModalUnirseIntercambio(){
+  this.modalUnirseIntercambio.present()
+ }
+
+ openModalUnirseProductos(){
+  this.modalUnirseProductos.present()
+ }
+cerrarModalIntercambio(){
+  this.modalUnirseIntercambio.dismiss()
+}
+
+cerrarModalProductos(){
+  this.modalUnirseProductos.dismiss();
+}
+
   openModal() {
     this.modal.present();
   }
@@ -113,9 +163,24 @@ selectedTurno: string = '';
   openModalTurno(turnos: any[]) {
     this.modalTurno.present();
   }
+  openModalTurnoProductos(turnos: any[]) {
+    this.modalTurnoProductos.present();
+  }
+  cancelModalTurnoProductos() {
+    this.modalTurnoProductos.dismiss();
+  }
+
 
   cancelModalTurno() {
     this.modalTurno.dismiss();
+  }
+
+  openModalProductos(){
+    this.modalProductos.present();
+  }
+
+  cancelModalProductos(){
+    this.modalProductos.dismiss();
   }
 
 
@@ -259,6 +324,27 @@ selectedTurno: string = '';
  
 }
 
+
+async cargarTurnosProductos() {
+  this.loading = await this.showLoading();
+  this.alcanciasService.obtenerTurnosPorIdAlcanciaProductos(this.idAlcancia).subscribe(
+    turnos => {
+      // Aquí puedes asignar los turnos a una variable de clase o realizar cualquier otra acción necesaria
+      this.turnos = turnos;
+      console.log('Turnos obtenidos en el componente:', turnos);
+      // Llama a la función para abrir el modal una vez que se hayan cargado los turnos
+      this.openModalTurnoProductos(turnos);
+    },
+    error => {
+      console.error('Error al obtener los turnos:', error);
+      // Manejar el error según sea necesario
+    }
+  );
+  this.loading.dismiss();
+  
+
+}
+
 async seleccionarTurno(idAlcancia: string, turnoId:string) {
   try {
 
@@ -275,6 +361,50 @@ async seleccionarTurno(idAlcancia: string, turnoId:string) {
   } catch (error) {
     console.error('Error al unirse al turno:', error);
     // Manejar el error según sea necesario
+  }
+}
+
+async seleccionarTurnoProductos(idAlcancia: string, turnoId:string) {
+  try {
+
+    this.loading = await this.showLoading();
+    
+    await this.alcanciasService.agregarUsuarioATurnoProductos(idAlcancia, turnoId);
+    await this.alcanciasService.agregarIntegranteProductos(this.idAlcancia);
+    await this.alertaUnirse('Cumple tus compromisos de pago.');
+    // Manejar la acción después de unirse al turno (por ejemplo, cerrar el modal)
+    this.modalTurnoProductos.dismiss();
+    this.router.navigateByUrl('/home');
+    this.loading.dismiss();
+    // Mostrar mensaje de éxito u otra acción necesaria
+  } catch (error) {
+    console.error('Error al unirse al turno:', error);
+    // Manejar el error según sea necesario
+  }
+}
+
+async crearAlcanciaProductos() {
+  try {
+    this.loading = await this.showLoading();
+    this.nuevaAlcanciaProductos.alcancia.montoCuotas = this.nuevaAlcanciaProductos.alcancia.costoProducto / this.nuevaAlcanciaProductos.alcancia.integrantes;
+
+     
+    
+    const alcanciaRef = await this.alcanciasService.crearAlcanciaProductos(this.nuevaAlcanciaProductos);
+    this.alcanciaRef = alcanciaRef;
+    console.log('Alcancía creada exitosamente', this.alcanciaRef);
+    this.loading.dismiss();
+    this.alertaCreacion('Continuar', this.alcanciaRef )
+    this.router.navigateByUrl('/home')
+    this.modalProductos.dismiss()
+  
+  } catch (error) {
+    console.error('Error al crear alcancía:', error);
+    this.loading.dismiss();
+    this.alertaFalla('Continuar')
+    this.router.navigateByUrl('/home')
+    this.modalProductos.dismiss()
+  
   }
 }
 }

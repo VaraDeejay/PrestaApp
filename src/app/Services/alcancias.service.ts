@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { Observable, combineLatest, forkJoin, from, merge, mergeMap, of, switchMap, tap } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { Alcancias, Usuario } from '../models/models';
+import { Alcancias, Usuario, AlcanciaProducto } from '../models/models';
 import firebase from 'firebase/compat/app';
 import { map } from 'rxjs';
 import {Firestore} from 'firebase/firestore'
@@ -32,9 +32,10 @@ export class AlcanciasService {
   
 
   alcanciasCollection: AngularFirestoreCollection<any>;
+  alcanciasProductosCollection: AngularFirestoreCollection<any>
 
   constructor(private firestore: AngularFirestore, private  afAuth: AngularFireAuth) {
-    this.alcanciasCollection = this.firestore.collection<any>('Alcancias');
+    this.alcanciasProductosCollection = this.firestore.collection<any>('Alcancias de Productos');
     this.alcanciasCollection = this.firestore.collection('alcancias');
   }
 
@@ -44,8 +45,7 @@ export class AlcanciasService {
       const alcanciaData = {
         creador: {
           id: user.email || '',
-          apellidos: '',
-          cedula: 0,
+        
           uid: user.uid
         },
         alcancia: datosAlcancia.alcancia,
@@ -81,8 +81,70 @@ export class AlcanciasService {
       throw new Error('Usuario no autenticado');
     }
   }
+
+  async crearAlcanciaProductos(datosAlcancia: AlcanciaProducto): Promise<firebase.firestore.DocumentReference> {
+    const user = await this.afAuth.currentUser;
+    if (user) {
+      const alcanciaData = {
+        creador: {
+          id: user.email || '',
+        
+          uid: user.uid
+        },
+        alcancia: datosAlcancia.alcancia,
+   
+      };
+      const alcanciaRef = await this.alcanciasProductosCollection.add(alcanciaData);
+      
+      console.log('ID de la alcancía creada:', alcanciaRef.id);
+      
+
+     const turnosCollection = this.firestore.collection(`Alcancias de Productos/${alcanciaRef.id}/turnos`);
+     const fechaInicio = new Date(datosAlcancia.alcancia.fechadeinicio);
+
+       for (let i = 1; i <= datosAlcancia.alcancia.integrantes; i++) {
+        const fechaTurno = new Date(fechaInicio);
+        fechaTurno.setDate(fechaTurno.getDate() + (datosAlcancia.alcancia.modalidad * (i - 1))); // Agregar días según la modalidad
+
+        const turnoData = {
+          fechaDeturno: firebase.firestore.Timestamp.fromDate(fechaTurno),
+
+          
+          // Otros datos que quieras agregar al turno
+        };
+
+        await turnosCollection.doc(i.toString()).set(turnoData);
+        
+      }
+
+   
+      return alcanciaRef;
+     
+    } else {
+      throw new Error('Usuario no autenticado');
+    }
+  }
+
+
+
   obtenerTurnosPorIdAlcancia(id: string): Observable<string[]> {
     return this.firestore.collection(`alcancias/${id}/turnos`).snapshotChanges().pipe(
+      map(actions => {
+        const turnos = actions
+          .map(a => {
+            const data = a.payload.doc.data() as any; // Suponiendo que los nombres están en un campo "nombre" dentro de los documentos de turno
+            return { id: a.payload.doc.id, ...data };
+          })
+          .filter(turno => !turno.nombre); // Filtrar los turnos que no tienen un nombre definido
+  
+        console.log('Turnos obtenidos:', turnos);
+        return turnos.map(turno => turno.id); // Devolver solo los IDs de los turnos
+      })
+    );
+  }
+
+  obtenerTurnosPorIdAlcanciaProductos(id: string): Observable<string[]> {
+    return this.firestore.collection(`Alcancias de Productos/${id}/turnos`).snapshotChanges().pipe(
       map(actions => {
         const turnos = actions
           .map(a => {
@@ -152,6 +214,47 @@ export class AlcanciasService {
 }
 
 
+async agregarIntegranteProductos(idAlcancia: string): Promise<void> {
+  try {
+    const user = await this.afAuth.currentUser;
+    if (user) {
+      const integrantesCollection = this.firestore.collection(`Alcancias de Productos/${idAlcancia}/integrantes`);
+      const integranteData = {
+        nombres: user.email,
+        uid: user.uid,
+      };
+      await integrantesCollection.doc(user.uid).set(integranteData);
+      console.log('Integrante agregado exitosamente a la alcancía:', idAlcancia);
+    } else {
+      throw new Error('Usuario no autenticado');
+    }
+  } catch (error) {
+    console.error('Error al agregar integrante a la alcancía:', error);
+    throw error;
+  }
+}
+
+async agregarUsuarioATurnoProductos(idAlcancia: string, turnoId: string) {
+  try {
+      // Verificar si el usuario está autenticado
+      const user = await this.afAuth.currentUser;
+      if (user) {
+          // Crear la referencia al documento del turno
+          const turnoRef = this.firestore.collection(`Alcancias de Productos/${idAlcancia}/turnos`).doc(turnoId);
+          // Actualizar el documento del turno con la información del usuario
+          await turnoRef.set({ usuarioId: user.uid, nombre: user.email }, { merge: true });
+          console.log('Usuario agregado exitosamente al turno:', turnoId);
+      } else {
+          throw new Error('Usuario no autenticado');
+      }
+  } catch (error) {
+      console.error('Error al agregar usuario al turno:', error);
+      throw error;
+  }
+}
+
+
+
 
 
 async obtenerAlcanciasUsuarioActual(): Promise<Alcancia[]> {
@@ -161,6 +264,47 @@ async obtenerAlcanciasUsuarioActual(): Promise<Alcancia[]> {
       const integranteUid = user.uid;
       const userEmail = user.email;
       const alcanciasQuerySnapshot = await this.firestore.collection<any>('alcancias').get().toPromise();
+
+      if (alcanciasQuerySnapshot) {
+        const alcanciasData: Alcancia[] = [];
+
+        alcanciasQuerySnapshot.forEach(async alcanciaDoc => {
+          const alcanciaRef = alcanciaDoc.ref;
+          console.log(alcanciaRef)
+          const integrantesCollection = alcanciaRef.collection('integrantes');
+          const integranteDoc = await integrantesCollection.doc(integranteUid).get();
+          
+          if (integranteDoc.exists) {
+            alcanciasData.push({
+              id: alcanciaDoc.id,
+              ...alcanciaDoc.data()
+            });
+           
+          }
+        });
+
+        console.log('Alcancías del usuario actual:', alcanciasQuerySnapshot);
+        console.log('alcanciadata:',alcanciasData)
+        return alcanciasData;
+      } else {
+        throw new Error('No se pudo obtener el snapshot de alcancías');
+      }
+    } else {
+      throw new Error('Usuario no autenticado');
+    }
+  } catch (error) {
+    console.error('Error al obtener alcancías del usuario:', error);
+    throw error;
+  }
+}
+
+async obtenerAlcanciasProductosUsuarioActual(): Promise<Alcancia[]> {
+  try {
+    const user = await this.afAuth.currentUser;
+    if (user) {
+      const integranteUid = user.uid;
+      const userEmail = user.email;
+      const alcanciasQuerySnapshot = await this.firestore.collection<any>('Alcancias de Productos').get().toPromise();
 
       if (alcanciasQuerySnapshot) {
         const alcanciasData: Alcancia[] = [];

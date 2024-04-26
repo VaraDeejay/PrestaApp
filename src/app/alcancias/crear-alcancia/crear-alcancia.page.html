@@ -17,7 +17,7 @@
   <ion-segment color="warning" md="ios" [(ngModel)]="selectedSegment">
     <ion-segment-button value="Crear">
       <ion-label>Crear Alcancia</ion-label>
-    </ion-segment-button> 
+    </ion-segment-button > 
     <ion-segment-button value="Unirse">
       <ion-label>Unirse</ion-label>
     </ion-segment-button>
@@ -28,12 +28,12 @@
   
       
         <ion-card-header>
-      <ion-title  class="ion-text-center">Selecciona</ion-title>
+      <ion-title  class="ion-text-center">Crear Alcancia</ion-title>
     </ion-card-header>
 
       <ion-card-content  class="ion-text-center">
       <ion-button color="white" (click)="openConfiguracion()">Intercambio de Dinero</ion-button>
-      <ion-button>Compra de Productos</ion-button>
+      <ion-button (click)="openConfiguraProducto()">Compra de Productos</ion-button>
     </ion-card-content>
     </ion-card>
     
@@ -41,6 +41,33 @@
 
 
   <ion-content color="primary" *ngIf="selectedSegment === 'Unirse'">
+
+
+    <ion-card class="ion-padding" color="tertiary">
+      <img src="./assets/img/PrestaLogoPositivo.png" alt="">
+    
+        
+          <ion-card-header>
+        <ion-title  class="ion-text-center">Unirse</ion-title>
+      </ion-card-header>
+  
+        <ion-card-content  class="ion-text-center">
+        <ion-button color="white" (click)="openModalUnirseIntercambio()">Intercambio de Dinero</ion-button>
+        <ion-button (click)="openModalUnirseProductos()">Compra de Productos</ion-button>
+      </ion-card-content>
+      </ion-card>
+
+
+
+
+<ion-modal #modalUnirseIntercambio>
+  <ng-template>
+  <ion-content color="primary">
+    <ion-toolbar color="primary">
+      <ion-buttons>
+      <ion-button color="tertiary" (click)="cerrarModalIntercambio()"><ion-icon name="arrow-back-outline"></ion-icon></ion-button>
+    </ion-buttons>
+  Dinero</ion-toolbar>
     <ion-card color="secondary" class="ion-padding">
       <img src="./assets/img/PrestaLogoPositivo.png" alt="">
       <ion-card-content class="ion-text-center">
@@ -52,7 +79,33 @@
         <h3>Solicita el ID de la alcancia al creador de la misma.</h3>
       </ion-card-content>
     </ion-card>
+  </ion-content>
+  </ng-template>
+</ion-modal>
 
+<ion-modal #modalUnirseProductos>
+  <ng-template>
+    <ion-content color="primary">
+    <ion-toolbar color="primary">
+      <ion-buttons>
+      <ion-button color="tertiary" (click)="cerrarModalProductos()"><ion-icon name="arrow-back-outline"></ion-icon></ion-button>
+    </ion-buttons>
+  Productos</ion-toolbar>
+    <ion-card color="secondary" class="ion-padding">
+      <img src="./assets/img/PrestaLogoPositivo.png" alt="">
+      <ion-card-content class="ion-text-center">
+        <h2>Ingresa el ID de la Alcancia</h2>
+        <ion-item lines="none" class="custom-input">
+          <ion-input class="custom-input" [(ngModel)]="idAlcancia" style="font-size: 16px; text-align: center;" ></ion-input>
+        </ion-item>
+        <ion-button (click)="cargarTurnosProductos()" expand="block" color="primary" >Solicitar Unirse</ion-button>
+        <h3>Solicita el ID de la alcancia al creador de la misma.</h3>
+      </ion-card-content>
+    </ion-card>
+  </ion-content>
+  </ng-template>
+</ion-modal>
+    
     
 
 
@@ -211,7 +264,7 @@
               </ion-item>
             </ion-list>
             <ion-button (click)="seleccionarTurno(idAlcancia, selectedTurno)" expand="block" color="primary" >Unirse</ion-button>
-            <h3>Al unirse a la alcancia, estas adquiriendo un compromiso de pagos hacia el administrador en cada una de las cuotas en los dias establecidos. En caso de mora, deberas cancelar una multa por atraso y tu cuenta puede ser suspendida y/o cancelada.</h3>
+            <h3>Al unirse a la alcancia, estas adquiriendo un compromiso de pagos en cada una de las cuotas en los dias establecidos. En caso de mora, deberas cancelar una multa por atraso y tu cuenta puede ser suspendida y/o cancelada.</h3>
           </ion-card-content>
         </ion-card>
 
@@ -228,5 +281,138 @@
   </ng-template>
 </ion-modal>
 
+<ion-modal md="ios" #modalTurnoProductos>
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons color="secondary" slot="start">
+          <ion-button color="white" (click)="cancelModalTurnoProductos()">Volver</ion-button>
+        </ion-buttons>
+        <ion-title>Seleccionar turno</ion-title>
+      </ion-toolbar>
+    </ion-header> 
+    <ion-content>
+
+      <ion-content>
+        <ion-card class="ion-padding">
+          <ion-card-content class="ion-text-center">
+            <h2>Selecciona un turno</h2>
+            <ion-list>
+              <ion-item lines="none" class="custom-input">
+                <ion-select [(ngModel)]="selectedTurno"  placeholder="Elige">
+                  <div slot="label">Turno</div>
+                  <ion-select-option *ngFor="let turno of turnos">{{turno}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-list>
+            <ion-button (click)="seleccionarTurnoProductos(idAlcancia, selectedTurno)" expand="block" color="primary" >Unirse</ion-button>
+            <h3>Al unirse a la alcancia, estas adquiriendo un compromiso de pagos en cada una de las cuotas en los dias establecidos. En caso de mora, deberas cancelar una multa por atraso y tu cuenta puede ser suspendida y/o cancelada.</h3>
+          </ion-card-content>
+        </ion-card>
+
+        
+       
+
+
+      </ion-content>
+
+      
+     
+      </ion-content>
+      
+  </ng-template>
+</ion-modal>
+
+
+ 
+  <ion-card *ngIf="configuraProducto === true" color="primary">
+    
+  
+  
+  <ion-card-content color="primary">
+    <ion-card-title style="font-size: 18px;" class="ion-text-center">
+      Costo del producto ($):
+    </ion-card-title>
+    <ion-input [(ngModel)]="nuevaAlcanciaProductos.alcancia.costoProducto" color="tertiary" type="number" class="custom-input" style="font-size: 72px; text-align: center;"></ion-input>
+    <ion-card color="white">
+      <ion-card-header>Datos de la alcancia:</ion-card-header>
+      <ion-card-content>
+        <ion-card-title>
+          <ion-input [(ngModel)]="nuevaAlcanciaProductos.alcancia.nombreProducto" placeholder="Ej. Tv 42Pulgadas Smart Tv" class="custom-input" style="font-size: 12px;">Descripción del producto</ion-input>
+        </ion-card-title>
+        <ion-card-title>
+          <ion-input [(ngModel)]="nuevaAlcanciaProductos.alcancia.url" placeholder="Copia y pega el link aqui" class="custom-input" style="font-size: 12px;">Url de foto referencial del producto</ion-input>
+        </ion-card-title>
+        <ion-card-title style="font-size: 12px;">Modalidad de pago
+          <ion-select [(ngModel)]="nuevaAlcanciaProductos.alcancia.modalidad" placeholder="Seleccione la modalidad" class="custom-input" style="font-size: 12px;">
+            <ion-select-option value="7">Semanal</ion-select-option>
+            <ion-select-option value="15">Quincenal</ion-select-option>
+            <ion-select-option value="30">Mensual</ion-select-option>
+          </ion-select>
+        </ion-card-title>
+        
+        <ion-card-title style="font-size: 12px;">Numero de integrantes
+          <ion-select [(ngModel)]="nuevaAlcanciaProductos.alcancia.integrantes" placeholder="Seleccione (max 15)" class="custom-input" style="font-size: 12px;">
+            <ion-select-option value="2">2</ion-select-option>
+            <ion-select-option value="4">4</ion-select-option>
+            <ion-select-option value="6">6</ion-select-option>
+            <ion-select-option value="8">8</ion-select-option>
+            <ion-select-option value="10">10</ion-select-option>
+            <ion-select-option value="12">12</ion-select-option>
+            <ion-select-option value="15">15</ion-select-option>
+          </ion-select>
+        </ion-card-title>
+       
+        
+      </ion-card-content>
+    </ion-card>
+    <h2>Al crear la alcancia, adquieres un compromiso de entregar el producto al integrante cuando corresponda su turno. <hr>La cantidad de integrantes sera igual a la cantidad de cuotas por pagar.</h2>
+  
+    <ion-button expand="block" color="secondary" class="ion-text-center"  (click)="openModalProductos()"  slot="center">Confirmar</ion-button>
+    
+  </ion-card-content>
+  
+  </ion-card> 
+
+  <ion-modal md="ios" #modalProductos>
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons color="secondary" slot="start">
+            <ion-button color="white" (click)="cancelModalProductos()">Volver</ion-button>
+          </ion-buttons>
+          <ion-title>Inicio de Alcancia</ion-title>
+        </ion-toolbar>
+      </ion-header> 
+      <ion-content>
+  
+        <ion-content>
+          <ion-card class="ion-padding">
+            <ion-card-content class="ion-text-center">
+              <h2>Fecha de inicio*</h2>
+              <ion-item lines="none" class="custom-input">
+                <ion-input  [(ngModel)]="nuevaAlcanciaProductos.alcancia.fechadeinicio" type="date" style="font-size: 18px; text-align: center;" ></ion-input>
+              </ion-item>
+              <ion-button (click)="crearAlcanciaProductos()" expand="block" color="primary" >Crear</ion-button>
+              <h3>* Al llegar la fecha de inicio, debe contar con todos los participantes integrados a la alcancia, de lo contrario, cada participante que se integre, debe cancelar las cuotas que ya han transcurrido.</h3>
+            </ion-card-content>
+          </ion-card>
+  
+          
+    
+  
+  
+        </ion-content>
+  
+        
+       
+        </ion-content>
+        
+    </ng-template>
+  </ion-modal>
+    
+  
+  
+ 
 
 
