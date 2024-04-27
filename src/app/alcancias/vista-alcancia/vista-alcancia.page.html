@@ -83,15 +83,15 @@
   <ion-card  *ngFor="let alcancias of alcanciasProductos" class="custom-card" (click)="detallesAlcancia(alcancia)">
     <img alt="Silhouette of mountains" src="./assets/img/PrestaAlcancia.png" />
     <ion-card-header  >
-      <ion-card-title style="font-size: 10px;" >Administrador</ion-card-title>
-      <ion-card-subtitle>{{alcancias.creador.id}}</ion-card-subtitle>
+      
+      <ion-card-subtitle>{{alcancias.alcancia.nombreProducto}}</ion-card-subtitle>
     </ion-card-header>
   
     <ion-card-content>
 
       <ion-list>
         <ion-item  style="font-size: 16px;">
-          <strong>Costo del Producto: ${{alcancias.alcancia.costoProducto}}</strong>
+          <strong>Costo: ${{alcancias.alcancia.costoProducto}}</strong>
         </ion-item>
         
         <ion-item  style="font-size: 12px;">
