@@ -70,7 +70,7 @@ export class AlcanciasService {
           // Otros datos que quieras agregar al turno
         };
 
-        await turnosCollection.doc(i.toString()).set(turnoData);
+        await turnosCollection.doc(i.toString().padStart(2, '0')).set(turnoData);
         
       }
 
@@ -88,43 +88,35 @@ export class AlcanciasService {
       const alcanciaData = {
         creador: {
           id: user.email || '',
-        
           uid: user.uid
         },
         alcancia: datosAlcancia.alcancia,
-   
       };
       const alcanciaRef = await this.alcanciasProductosCollection.add(alcanciaData);
       
       console.log('ID de la alcancía creada:', alcanciaRef.id);
-      
-
-     const turnosCollection = this.firestore.collection(`Alcancias de Productos/${alcanciaRef.id}/turnos`);
-     const fechaInicio = new Date(datosAlcancia.alcancia.fechadeinicio);
-
-       for (let i = 1; i <= datosAlcancia.alcancia.integrantes; i++) {
+  
+      const turnosCollection = this.firestore.collection(`Alcancias de Productos/${alcanciaRef.id}/turnos`);
+      const fechaInicio = new Date(datosAlcancia.alcancia.fechadeinicio);
+  
+      for (let i = 1; i <= datosAlcancia.alcancia.integrantes; i++) {
         const fechaTurno = new Date(fechaInicio);
         fechaTurno.setDate(fechaTurno.getDate() + (datosAlcancia.alcancia.modalidad * (i - 1))); // Agregar días según la modalidad
-
+  
         const turnoData = {
           fechaDeturno: firebase.firestore.Timestamp.fromDate(fechaTurno),
-
-          
           // Otros datos que quieras agregar al turno
         };
-
-        await turnosCollection.doc(i.toString()).set(turnoData);
-        
+  
+        // Establecer el identificador del documento como el número del turno
+        await turnosCollection.doc(i.toString().padStart(2, '0')).set(turnoData);
       }
-
-   
+  
       return alcanciaRef;
-     
     } else {
       throw new Error('Usuario no autenticado');
     }
   }
-
 
 
   obtenerTurnosPorIdAlcancia(id: string): Observable<string[]> {
@@ -270,21 +262,27 @@ async obtenerAlcanciasUsuarioActual(): Promise<Alcancia[]> {
 
         alcanciasQuerySnapshot.forEach(async alcanciaDoc => {
           const alcanciaRef = alcanciaDoc.ref;
-          console.log(alcanciaRef)
           const integrantesCollection = alcanciaRef.collection('integrantes');
           const integranteDoc = await integrantesCollection.doc(integranteUid).get();
-          
+
           if (integranteDoc.exists) {
             alcanciasData.push({
               id: alcanciaDoc.id,
               ...alcanciaDoc.data()
             });
-           
+          } else {
+            // Verificar si el creador de la alcancía es el usuario actual
+            const alcanciaData = alcanciaDoc.data();
+            if (alcanciaData && alcanciaData.creador && alcanciaData.creador.uid === integranteUid) {
+              alcanciasData.push({
+                id: alcanciaDoc.id,
+                ...alcanciaData
+              });
+            }
           }
         });
 
-        console.log('Alcancías del usuario actual:', alcanciasQuerySnapshot);
-        console.log('alcanciadata:',alcanciasData)
+        console.log('Alcancías del usuario actual:', alcanciasData);
         return alcanciasData;
       } else {
         throw new Error('No se pudo obtener el snapshot de alcancías');
@@ -312,20 +310,28 @@ async obtenerAlcanciasProductosUsuarioActual(): Promise<Alcancia[]> {
         alcanciasQuerySnapshot.forEach(async alcanciaDoc => {
           const alcanciaRef = alcanciaDoc.ref;
           console.log(alcanciaRef)
-          const integrantesCollection = alcanciaRef.collection('integrantes');
-          const integranteDoc = await integrantesCollection.doc(integranteUid).get();
-          
-          if (integranteDoc.exists) {
+          // Verificar si el creador de la alcancía es el usuario actual
+          const alcanciaData = alcanciaDoc.data();
+          if (alcanciaData && alcanciaData.creador && alcanciaData.creador.uid === integranteUid) {
             alcanciasData.push({
               id: alcanciaDoc.id,
-              ...alcanciaDoc.data()
+              ...alcanciaData
             });
-           
+          } else {
+            // Si el usuario no es el creador, comprobar si es un integrante
+            const integrantesCollection = alcanciaRef.collection('integrantes');
+            const integranteDoc = await integrantesCollection.doc(integranteUid).get();
+
+            if (integranteDoc.exists) {
+              alcanciasData.push({
+                id: alcanciaDoc.id,
+                ...alcanciaDoc.data()
+              });
+            }
           }
         });
 
-        console.log('Alcancías del usuario actual:', alcanciasQuerySnapshot);
-        console.log('alcanciadata:',alcanciasData)
+        console.log('Alcancías del usuario actual:', alcanciasData);
         return alcanciasData;
       } else {
         throw new Error('No se pudo obtener el snapshot de alcancías');

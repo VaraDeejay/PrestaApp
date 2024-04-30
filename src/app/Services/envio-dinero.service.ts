@@ -215,4 +215,21 @@ await this.firestore.firestore.runTransaction(async transaction => {
     }
   }
 
+  async buscarTransaccionesPorAlcanciaIdProductos(alcanciaId: string){
+    try {
+      const querySnapshot = await this.firestore.collection('transacciones', ref =>
+        ref.where('alcanciaRef', '==', alcanciaId)).get().toPromise();
+
+      return querySnapshot?.docs.map(doc => doc.data());
+
+      
+    }
+
+    catch(error){
+      console.error('Error al buscar transacciones:', error);
+      throw error;
+    }
+  }
+
+
 }

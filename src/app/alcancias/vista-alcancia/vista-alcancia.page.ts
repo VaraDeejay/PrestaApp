@@ -12,7 +12,7 @@ import { AuthService } from 'src/app/Services/auth.service';
 import { EnvioDineroService } from 'src/app/Services/envio-dinero.service';
 import { Usuario } from 'src/app/models/models';
 import { LoadingController } from '@ionic/angular';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 
 
 @Component({
@@ -50,7 +50,7 @@ datosAlcancia: any;
   abonado!: number;
   loading: any; 
 
-  constructor(public alertCtrl: AlertController, public loadingCtrl: LoadingController, private envioDineroService: EnvioDineroService, private authService: AuthService, private afAuth: AngularFireAuth, private datePipe: DatePipe, private firestore: AngularFirestore, public modalCtrl: ModalController, public router: Router, private alcanciasService: AlcanciasService) { }
+  constructor(public toastController: ToastController, public alertCtrl: AlertController, public loadingCtrl: LoadingController, private envioDineroService: EnvioDineroService, private authService: AuthService, private afAuth: AngularFireAuth, private datePipe: DatePipe, private firestore: AngularFirestore, public modalCtrl: ModalController, public router: Router, private alcanciasService: AlcanciasService) { }
   
   docId: string | undefined;
   fechaDeturno: Date | undefined;
@@ -143,10 +143,61 @@ datosAlcancia: any;
   @ViewChild('modalPagar')
   modalPagar!: IonModal;
 
+  @ViewChild('modalPagarProductos')
+  modalPagarProductos!: IonModal;
+
   @ViewChild('modalPagosTurnos')
   modalPagosTurnos!: IonModal;
+
+  @ViewChild('modalProductos')
+  modalProductos!: IonModal;
+
+  @ViewChild('modalTurnosProductos')
+  modalTurnosProductos!: IonModal;
+
+  openModalPagarProductos(turno:any){
+    this.turno = turno
+    this.modalPagarProductos.present()
+  }
+
+  cancelModalTurnosProductos(){
+    this.modalTurnosProductos.dismiss()
+  }
+
+  openModalTurnosProductos(){
   
+    this.modalTurnosProductos.present()
+  }
+
+  cancelModalPagarProductos(){
+    this.modalPagarProductos.dismiss()
+  }
   
+
+ async copiarAlcanciaId(alcanciaRef: string){
+
+    try {
+      // Intenta copiar el texto al portapapeles
+      await navigator.clipboard.writeText(alcanciaRef);
+      console.log('Texto copiado al portapapeles:', alcanciaRef);
+      // Muestra un mensaje de éxito utilizando toast
+      this.mostrarToast("ID de alcancía copiado al portapapeles");
+    } catch (err) {
+      console.error('Error al copiar al portapapeles:', err);
+      // Muestra un mensaje de error utilizando toast
+      this.mostrarToast("Error al copiar ID de alcancía al portapapeles");
+    }
+    
+
+  }
+
+  async mostrarToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000 // Duración en milisegundos
+    });
+    toast.present();
+  }
 
   async detallesAlcancia(alcancia:any){
     this.alcanciaSeleccionada = alcancia;
@@ -237,6 +288,97 @@ datosAlcancia: any;
     } catch (error) {
         console.error('Error al mostrar detalles de la alcancía:', error);
     }
+}
+
+async detallesAlcanciaProducto(alcancia:any){
+  this.alcanciaSeleccionada = alcancia;
+
+
+  try {
+      await this.modalProductos.present();
+
+      await this.calcularAbonado();
+  
+      // Llamar a encontrarPrimerTurnoPosterior para obtener el primer turno posterior
+      const turnosQuerySnapshot = await this.firestore.collection('Alcancias de Productos').doc(alcancia.id).collection('turnos').get().toPromise();
+      
+      // Obtén el usuario actual
+      const currentUser = await this.authService.getUsuario();
+
+      if(currentUser) {
+          const userUid = currentUser.uid;
+
+          // Manejar el resultado del primer turno posterior encontrado
+          if (turnosQuerySnapshot) {
+              const primerTurnoPosterior = await this.alcanciasService.encontrarPrimerTurnoPosterior(turnosQuerySnapshot);
+              console.log('Primer turno posterior encontrado:', primerTurnoPosterior);
+              if (primerTurnoPosterior) {
+                  // Convertir el Timestamp a Date
+                  const fechaDeturno = primerTurnoPosterior.data.fechaDeturno.toDate();
+                  primerTurnoPosterior.data.fechaDeturno = fechaDeturno;
+
+                  this.diferenciaEnDias = this.obtenerDiferenciaEnDias(fechaDeturno);
+                  this.turnoSeleccionado = primerTurnoPosterior;
+
+                  // Iterar sobre los documentos para encontrar el que cumpla la condición
+                  turnosQuerySnapshot.forEach((doc) => {
+                      const data = doc.data();
+                      if (data['usuarioId'] === userUid) {
+                        this.docId = doc.id;
+                        this.fechaDeturno = data['fechaDeturno'].toDate(); // Convertir a Date si es un objeto Timestamp
+                        console.log('Documento donde usuarioId es igual al user.uid:', this.docId);
+                        console.log('Fecha de turno:', this.fechaDeturno);
+                          // Puedes mostrar el documento o realizar cualquier otra acción aquí
+                      }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                      this.turnos = [];
+                      const promises: any[] = [];
+
+
+                       turnosQuerySnapshot.forEach((doc) => {
+                       const turno = doc.data();
+                       const fechaDeturnosDetalles = turno['fechaDeturno'].toDate();
+
+
+
+
+                       const promise = this.obtenerDiferenciaEnDias2(fechaDeturnosDetalles).then((diferenciaEnDiasDetalles) => {
+                      
+                        const turnoConId = {
+                          id: doc.id,
+                          ...turno,  
+                          diferenciaEnDiasDetalles: diferenciaEnDiasDetalles
+                       
+                       
+                      
+                        
+                       };
+                    
+                    return turnoConId;
+                    
+                        });
+                        promises.push(promise)
+                  });
+
+                  Promise.all(promises).then((turnosConDiferenciaEnDias) => {
+                    this.turnos = turnosConDiferenciaEnDias;
+
+                });
+              })};
+              
+              this.turnoSeleccionado = primerTurnoPosterior
+              // Puedes mostrar el turno encontrado en el modal o realizar cualquier otra acción aquí
+          } else {
+              console.log('No se encontró ningún turno posterior.');
+              // Puedes mostrar un mensaje al usuario u otra acción en caso de que no se encuentre ningún turno posterior
+          }
+      } else {
+          console.log('No hay usuario logueado.');
+          // Si no hay usuario logueado, muestra un mensaje o realiza otra acción
+      }
+  } catch (error) {
+      console.error('Error al mostrar detalles de la alcancía:', error);
+  }
 }
 
 
@@ -336,6 +478,35 @@ async calcularAbonado(): Promise<number> {
     this.modalPagosTurnos.present()
   }
 
+
+  async openModalPagosTurnosProductos(alcanciaSeleccionada: any){
+    console.log(alcanciaSeleccionada.id);
+     
+
+    try{
+       
+      this.datosAlcancia = await this.obtenerDatosAlcanciaConIntegrantesProductos(alcanciaSeleccionada.id)
+
+
+      this.transacciones = await this.envioDineroService.buscarTransaccionesPorAlcanciaIdProductos(alcanciaSeleccionada.id);
+      console.log('Transacciones encontradas:', this.transacciones, this.datosAlcancia)
+
+
+
+    } catch (error){
+
+      console.error ('Error al buscar transacciones:', error)
+    }
+
+
+   
+    
+
+
+    this.modalPagosTurnos.present()
+  }
+
+
  
   
 
@@ -366,6 +537,10 @@ async calcularAbonado(): Promise<number> {
 
   cerrarDetalles(){
     this.modal.dismiss();
+  }
+
+  cerrarDetallesProductos(){
+    this.modalProductos.dismiss();
   }
 
   atrasHome(){
@@ -414,6 +589,7 @@ async calcularAbonado(): Promise<number> {
         this.loading.dismiss()
         this.alertaEnvio('Continuar')
         this.modalPagar.dismiss();
+        this.modalPagarProductos.dismiss()
       } else {
         console.error('Usuario no autenticado');
         this.loading.dismiss()
@@ -492,6 +668,43 @@ async calcularAbonado(): Promise<number> {
   
       // Obtener datos de la subcolección 'integrantes'
       const integrantesSnapshot = await this.firestore.collection('alcancias').doc(alcanciaId).collection('integrantes').get().toPromise();
+  
+      if (!integrantesSnapshot) {
+        console.error('No se pudo obtener la colección de integrantes.');
+        return null;
+      }
+  
+      const integrantesData: any = [];
+      integrantesSnapshot.forEach((doc) => {
+        integrantesData.push({ id: doc.id, ...doc.data() });
+      });
+  
+      return { alcancia: alcanciaData, integrantes: integrantesData };
+    } catch (error) {
+      console.error('Error al obtener datos de la alcancía con integrantes:', error);
+      return null;
+    }
+  }
+
+  async obtenerDatosAlcanciaConIntegrantesProductos(alcanciaId: string): Promise<any> {
+    try {
+      // Obtener datos de la alcancía
+      const alcanciaSnapshot = await this.firestore.collection('Alcancias de Productos').doc(alcanciaId).get().toPromise();
+  
+      if (alcanciaSnapshot && !alcanciaSnapshot.exists) {
+        console.error('El documento de la alcancía no existe.');
+        return null;
+      }
+  
+      if (!alcanciaSnapshot) {
+        console.error('No se pudo obtener el documento de la alcancía.');
+        return null;
+      }
+  
+      const alcanciaData = alcanciaSnapshot.data();
+  
+      // Obtener datos de la subcolección 'integrantes'
+      const integrantesSnapshot = await this.firestore.collection('Alcancias de Productos').doc(alcanciaId).collection('integrantes').get().toPromise();
   
       if (!integrantesSnapshot) {
         console.error('No se pudo obtener la colección de integrantes.');

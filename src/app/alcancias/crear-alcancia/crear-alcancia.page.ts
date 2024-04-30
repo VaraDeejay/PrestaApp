@@ -7,6 +7,7 @@ import { Usuario } from 'src/app/models/models';
 import { LoadingController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from 'src/app/Services/auth.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-crear-alcancia',
@@ -24,7 +25,8 @@ turnoId!: string;
 selectedTurno: string = '';
   alcanciaRef: any;
   configuraProducto: boolean = false;
-  constructor(private afAuth: AuthService, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private alcanciasService: AlcanciasService, private router: Router,  private modalController: ModalController) { }
+  mostrarMensaje: any;
+  constructor(public toastController : ToastController, private afAuth: AuthService, public loadingCtrl: LoadingController, public alertCtrl: AlertController, private alcanciasService: AlcanciasService, private router: Router,  private modalController: ModalController) { }
 
   selectedSegment: string = 'Crear';
   configuraAlcancia: boolean = false;
@@ -201,7 +203,7 @@ cerrarModalProductos(){
       this.alcanciaRef = alcanciaRef;
       console.log('Alcancía creada exitosamente', this.alcanciaRef);
       this.loading.dismiss();
-      this.alertaCreacion('Continuar', this.alcanciaRef )
+      this.alertaCreacion('Continuar', this.alcanciaRef.id )
       this.router.navigateByUrl('/home')
       this.modal.dismiss()
     
@@ -226,16 +228,41 @@ cerrarModalProductos(){
     return loading;
   }
 
-  async alertaCreacion(message:string, alcanciaRef: string){
-
+  async alertaCreacion(message: string, alcanciaRef: string) {
     const alert = await this.alertCtrl.create({
-      header:'¡Alcancia creada exitosamente!',
-      message: `${message}\nAlcancia Ref: ${alcanciaRef}`,
-      buttons:['Ok']
+      header: '¡Alcancia creada exitosamente!',
+      message: `Id de tu alcancia: ${alcanciaRef}\n}`,
+      buttons: [
+        {
+          text: 'Copiar',
+          handler: async () => {
+            try {
+              // Intenta copiar el texto al portapapeles
+              await navigator.clipboard.writeText(alcanciaRef);
+              console.log('Texto copiado al portapapeles:', alcanciaRef);
+              // Muestra un mensaje de éxito utilizando toast
+              this.mostrarToast("ID de alcancía copiado al portapapeles");
+            } catch (err) {
+              console.error('Error al copiar al portapapeles:', err);
+              // Muestra un mensaje de error utilizando toast
+              this.mostrarToast("Error al copiar ID de alcancía al portapapeles");
+            }
+          }
+        },
+        {
+          text: 'Ok'
+        }
+      ]
     });
+    await alert.present();}
 
-    await alert.present();
-  }
+async mostrarToast(message: string) {
+  const toast = await this.toastController.create({
+    message: message,
+    duration: 2000 // Duración en milisegundos
+  });
+  toast.present();
+}
 
   async alertaFalla(message:string){
 
@@ -355,6 +382,7 @@ async seleccionarTurno(idAlcancia: string, turnoId:string) {
     await this.alertaUnirse('Cumple tus compromisos de pago.');
     // Manejar la acción después de unirse al turno (por ejemplo, cerrar el modal)
     this.modalTurno.dismiss();
+    this.modalUnirseIntercambio.dismiss();
     this.router.navigateByUrl('/home');
     this.loading.dismiss();
     // Mostrar mensaje de éxito u otra acción necesaria
@@ -374,6 +402,7 @@ async seleccionarTurnoProductos(idAlcancia: string, turnoId:string) {
     await this.alertaUnirse('Cumple tus compromisos de pago.');
     // Manejar la acción después de unirse al turno (por ejemplo, cerrar el modal)
     this.modalTurnoProductos.dismiss();
+    this.modalUnirseProductos.dismiss();
     this.router.navigateByUrl('/home');
     this.loading.dismiss();
     // Mostrar mensaje de éxito u otra acción necesaria
@@ -394,7 +423,7 @@ async crearAlcanciaProductos() {
     this.alcanciaRef = alcanciaRef;
     console.log('Alcancía creada exitosamente', this.alcanciaRef);
     this.loading.dismiss();
-    this.alertaCreacion('Continuar', this.alcanciaRef )
+    this.alertaCreacion('Continuar', this.alcanciaRef.id )
     this.router.navigateByUrl('/home')
     this.modalProductos.dismiss()
   
