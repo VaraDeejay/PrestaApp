@@ -1,18 +1,23 @@
+<!-----------------------------------------------------------------Header primera vista-------------------------------------------------------------------------------------------------------->
+
+
 <ion-header color="primary">
   <ion-toolbar color="primary">
     <ion-buttons color="secondary" slot="start">
-      <ion-button color="tertiary" (click)="atrasHome()" ><ion-icon name="arrow-back-outline"></ion-icon></ion-button>
+      <ion-button color="tertiary" (click)="atrasHome()"
+        ><ion-icon name="arrow-back-outline"></ion-icon
+      ></ion-button>
     </ion-buttons>
-    
   </ion-toolbar>
 </ion-header>
 <ion-header class="ion-no-border">
   <ion-toolbar color="primary">
     <ion-title mode="md" class="ion-no-padding">
-      <ion-label >
+      <ion-label>
         <ion-text color="secondary">Estas son tus</ion-text>
-        <p><ion-text color="white"><strong>Alcancias</strong></ion-text></p>
-        
+        <p>
+          <ion-text color="white"><strong>Alcancias</strong></ion-text>
+        </p>
       </ion-label>
     </ion-title>
     <ion-avatar slot="end">
@@ -20,116 +25,86 @@
     </ion-avatar>
   </ion-toolbar>
 </ion-header>
-    
-    
-  
-
-
+<!-----------------------------------------------------------------Todas las alcancias-------------------------------------------------------------------------------------------------------->
 
 <ion-content scrollY="true" mode="ios" color="primary">
+  <ion-card color="primary" class="banners">
+    <ion-img src="./assets/img/bannerdinero.png"></ion-img>
+    <div class="card-container">
+      <ion-card
+        *ngFor="let alcancia of alcancias"
+        class="custom-card"
+        (click)="detallesAlcancia(alcancia)"
+      >
+        <img
+          alt="Silhouette of mountains"
+          src="./assets/img/PrestaAlcancia.png"
+        />
+        <ion-card-header>
+          <ion-card-title style="font-size: 10px">Administrador</ion-card-title>
+          <ion-card-subtitle>{{alcancia.creador.id}}</ion-card-subtitle>
+        </ion-card-header>
 
-  
- 
+        <ion-card-content>
+          <ion-list>
+            <ion-item style="font-size: 16px">
+              <strong>Recibes: ${{alcancia.alcancia.montoARecibir}}</strong>
+            </ion-item>
 
- <ion-card color="primary" class="banners">
-
-  <ion-img src="./assets/img/bannerdinero.png"></ion-img>
-  <div class="card-container">
-    
-  
-
-  <ion-card  *ngFor="let alcancia of alcancias" class="custom-card" (click)="detallesAlcancia(alcancia)">
-    <img alt="Silhouette of mountains" src="./assets/img/PrestaAlcancia.png" />
-    <ion-card-header  >
-      <ion-card-title style="font-size: 10px;" >Administrador</ion-card-title>
-      <ion-card-subtitle>{{alcancia.creador.id}}</ion-card-subtitle>
-    </ion-card-header>
-  
-    <ion-card-content>
-
-      <ion-list>
-        <ion-item  style="font-size: 16px;">
-          <strong>Recibes: ${{alcancia.alcancia.montoARecibir}}</strong>
-        </ion-item>
-        
-        <ion-item  style="font-size: 12px;">
-          Cuotas: ${{alcancia.alcancia.montoCuotas}}
-        </ion-item>
-        <ion-item  style="font-size: 12px;">
-          Integrantes: {{alcancia.alcancia.integrantes}}
-        </ion-item>
-        <ion-item  style="font-size: 12px;">
-          Pago cada {{alcancia.alcancia.modalidad}} días.
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
+            <ion-item style="font-size: 12px">
+              Cuotas: ${{alcancia.alcancia.montoCuotas}}
+            </ion-item>
+            <ion-item style="font-size: 12px">
+              Integrantes: {{alcancia.alcancia.integrantes}}
+            </ion-item>
+            <ion-item style="font-size: 12px">
+              Pago cada {{alcancia.alcancia.modalidad}} días.
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </div>
   </ion-card>
-  
-</div>
 
+  <ion-card color="primary" class="banners">
+    <ion-img src="./assets/img/bannerproductos.png"></ion-img>
+    <div class="card-container">
+      <ion-card
+        *ngFor="let alcancias of alcanciasProductos"
+        class="custom-card"
+        (click)="detallesAlcanciaProducto(alcancias)"
+      >
+        <img alt="Silhouette of mountains" src="{{alcancias.alcancia.url}}" />
+        <ion-card-header>
+          <ion-card-subtitle
+            >{{alcancias.alcancia.nombreProducto}}</ion-card-subtitle
+          >
+        </ion-card-header>
 
+        <ion-card-content>
+          <ion-list>
+            <ion-item style="font-size: 16px">
+              <strong>Precio: ${{alcancias.alcancia.costoProducto}}</strong>
+            </ion-item>
 
-</ion-card>
-
-
-
-<ion-card color="primary" class="banners">
-
-  <ion-img src="./assets/img/bannerproductos.png"></ion-img>
-  <div class="card-container">
-   
-  
-
-  <ion-card  *ngFor="let alcancias of alcanciasProductos" class="custom-card" (click)="detallesAlcanciaProducto(alcancias)">
-    <img alt="Silhouette of mountains" src="{{alcancias.alcancia.url}}" />
-    <ion-card-header  >
-      
-      <ion-card-subtitle>{{alcancias.alcancia.nombreProducto}}</ion-card-subtitle>
-    </ion-card-header>
-  
-    <ion-card-content>
-
-      <ion-list>
-        <ion-item  style="font-size: 16px;">
-          <strong>Costo: ${{alcancias.alcancia.costoProducto}}</strong>
-        </ion-item>
-        
-        <ion-item  style="font-size: 12px;">
-          Cuotas: ${{alcancias.alcancia.montoCuotas}}
-        </ion-item>
-        <ion-item  style="font-size: 12px;">
-          Integrantes: {{alcancias.alcancia.integrantes}}
-        </ion-item>
-        <ion-item  style="font-size: 12px;">
-          Pago cada {{alcancias.alcancia.modalidad}} días.
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
+            <ion-item style="font-size: 12px">
+              Cuotas: ${{alcancias.alcancia.montoCuotas}}
+            </ion-item>
+            <ion-item style="font-size: 12px">
+              Cantidad de cuotas: {{alcancias.alcancia.integrantes}}
+            </ion-item>
+            <ion-item style="font-size: 12px">
+              Pago cada {{alcancias.alcancia.modalidad}} días.
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </div>
   </ion-card>
-  
-</div>
-
-
-
-</ion-card>
-<img src="./assets/img/PrestaLogoPositivo.png" alt="">
-
-
-
+  <img src="./assets/img/PrestaLogoPositivo.png" alt="" />
 </ion-content>
 
-
-  
-
-
-
-
-
-
-
-
-
-
+<!-----------------------------------------------------------------Alcancias Dinero-------------------------------------------------------------------------------------------------------->
 
 
 <ion-modal mode="ios" #modal>
@@ -137,18 +112,20 @@
     <ion-header color="primary">
       <ion-toolbar color="primary">
         <ion-buttons color="secondary" slot="start">
-          <ion-button color="tertiary" (click)="cerrarDetalles()"  ><ion-icon name="arrow-back-outline"></ion-icon></ion-button>
+          <ion-button color="tertiary" (click)="cerrarDetalles()"
+            ><ion-icon name="arrow-back-outline"></ion-icon
+          ></ion-button>
         </ion-buttons>
-        
       </ion-toolbar>
     </ion-header>
     <ion-header class="ion-no-border">
       <ion-toolbar color="primary">
         <ion-title mode="md" class="ion-no-padding">
-          <ion-label >
+          <ion-label>
             <ion-text color="secondary">Detalles</ion-text>
-            <p><ion-text color="white"><strong>Alcancia</strong></ion-text></p>
-            
+            <p>
+              <ion-text color="white"><strong>Alcancia</strong></ion-text>
+            </p>
           </ion-label>
         </ion-title>
         <ion-avatar slot="end">
@@ -156,120 +133,487 @@
         </ion-avatar>
       </ion-toolbar>
     </ion-header>
-    
+
     <ion-content scrollY="true" mode="ios" color="primary">
-     
-    
-     <ion-content color="primary">
-      
-    <ion-grid>
-      
-      <ion-card>
-        <img alt="Silhouette of mountains" src="./assets/img/PrestaAlcancia.png" />
-        <ion-card color="white">
-          <ion-card-content>
-        <ion-card-title  style="font-size: 14px;">ID: {{alcanciaSeleccionada.id}} <ion-button style="font-size: 12px;" (click)="copiarAlcanciaId(alcanciaSeleccionada.id)">Copiar ID</ion-button></ion-card-title>
-        
-      </ion-card-content>
-      </ion-card>
-      <ion-row>
-        <ion-col>
-    <ion-card>
-      <ion-card-content>
-      <ion-card-subtitle>
-        Monto a recibir: 
-       
-          <ion-card-title class="custom-input" style="font-size: 32px;">${{alcanciaSeleccionada.alcancia.montoARecibir}}</ion-card-title>
-       
-      </ion-card-subtitle>
-    </ion-card-content>
-    </ion-card>
-    <ion-card *ngIf="docId && fechaDeturno">
-      <ion-card-content>
-        <ion-card-title style="font-size: 18px;">Tu turno: Turno {{docId}} | Fecha:{{fechaDeturno | date}}</ion-card-title>
-        <ion-card-subtitle></ion-card-subtitle>
-        
-        
-      </ion-card-content>
-    </ion-card>
-    <ion-card>
-    <ion-button (click)="openModalTurnos()">
-      Pagar cuotas
-    </ion-button>
-    <ion-button (click)="openModalPagosTurnos(alcanciaSeleccionada)" >Ver turnos</ion-button>
-    </ion-card>
-    </ion-col>
-    <ion-col>
-    <ion-card>
-      <ion-card-content>
-        <ion-card-title>${{alcanciaSeleccionada.alcancia.montoCuotas}}</ion-card-title>
-        <ion-card-subtitle>Cuotas</ion-card-subtitle>
-        
-      </ion-card-content>
-    </ion-card>
-    <ion-card>
-      <ion-card-content>
-        <ion-card-title>{{abonado}}$</ion-card-title>
-        <ion-card-subtitle>Abonado</ion-card-subtitle>
-      </ion-card-content>
-    </ion-card>
-    <ion-card *ngIf="turnoSeleccionado">
-      <ion-card-content>
-        <ion-card-title style="font-size: 18px;">Turno {{turnoSeleccionado.id}} de {{alcanciaSeleccionada.alcancia.integrantes}} | Fecha:{{turnoSeleccionado.data.fechaDeturno | date}}</ion-card-title>
-        <ion-card-subtitle>Turno actual:<hr>{{turnoSeleccionado.data.nombre}}</ion-card-subtitle>
-        
-      </ion-card-content>
-    </ion-card>
-    </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-card color="success">
-        <ion-card-content>
-      <ion-card-title  style="font-size: 20px;">Dias para proxima cuota: {{diferenciaEnDias | async}}</ion-card-title>
-    </ion-card-content>
-    </ion-card>
-    </ion-row>
-    
-    </ion-card>
-    </ion-grid>
-    <ion-grid>
-      
-      <ion-row>
-       <ion-col size="6">
-        
-       </ion-col>
-       <ion-col size="6">
-       
-    
-       </ion-col>
-    </ion-row>
-    </ion-grid>
-    
+      <ion-content color="primary">
+        <ion-grid>
+          <ion-card>
+            <img
+              alt="Silhouette of mountains"
+              src="./assets/img/PrestaAlcancia.png"
+            />
+            <ion-card color="white">
+              <ion-card-content>
+                <ion-card-title style="font-size: 14px"
+                  >ID: {{alcanciaSeleccionada.id}}
+                  <ion-button
+                    style="font-size: 12px"
+                    (click)="copiarAlcanciaId(alcanciaSeleccionada.id)"
+                    >Copiar ID</ion-button
+                  ></ion-card-title
+                >
+              </ion-card-content>
+            </ion-card>
+            <ion-row>
+              <ion-col>
+                <ion-card>
+                  <ion-card-content>
+                    <ion-card-subtitle>
+                      Monto a recibir:
+
+                      <ion-card-title
+                        class="custom-input"
+                        style="font-size: 32px"
+                        >${{alcanciaSeleccionada.alcancia.montoARecibir}}</ion-card-title
+                      >
+                    </ion-card-subtitle>
+                  </ion-card-content>
+                </ion-card>
+                <ion-card *ngIf="docId && fechaDeturno">
+                  <ion-card-content>
+                    <ion-card-title style="font-size: 18px"
+                      >Tu turno: Turno {{docId}} | Fecha:{{fechaDeturno |
+                      date}}</ion-card-title
+                    >
+                    <ion-card-subtitle></ion-card-subtitle>
+                  </ion-card-content>
+                </ion-card>
+                <ion-card>
+                  <ion-button (click)="openModalTurnos()">
+                    Pagar cuotas
+                  </ion-button>
+                  <ion-button
+                    (click)="openModalPagosTurnos(alcanciaSeleccionada)"
+                    >Ver turnos</ion-button
+                  >
+                </ion-card>
+                <ion-card>
+                  <ion-button
+                    *ngIf="alcanciaSeleccionada.creador.uid === user.uid"
+                    (click)="openModalEditarAlcanciaDinero(alcanciaSeleccionada)"
+                    >Editar alcancía</ion-button
+                  >
+                </ion-card>
+              </ion-col>
+              <ion-col>
+                <ion-card>
+                  <ion-card-content>
+                    <ion-card-title
+                      >${{alcanciaSeleccionada.alcancia.montoCuotas}}</ion-card-title
+                    >
+                    <ion-card-subtitle>Cuotas</ion-card-subtitle>
+                  </ion-card-content>
+                </ion-card>
+                <ion-card>
+                  <ion-card-content>
+                    <ion-card-title>{{abonado}}$</ion-card-title>
+                    <ion-card-subtitle>Abonado</ion-card-subtitle>
+                  </ion-card-content>
+                </ion-card>
+                <ion-card *ngIf="turnoSeleccionado">
+                  <ion-card-content>
+                    <ion-card-title style="font-size: 18px"
+                      >Turno {{turnoSeleccionado.id}} de
+                      {{alcanciaSeleccionada.alcancia.integrantes}} |
+                      Fecha:{{turnoSeleccionado.data.fechaDeturno |
+                      date}}</ion-card-title
+                    >
+                    <ion-card-subtitle
+                      >Turno actual:
+                      <hr />
+                      {{turnoSeleccionado.data.nombre}}</ion-card-subtitle
+                    >
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-card color="success">
+                <ion-card-content>
+                  <ion-card-title style="font-size: 20px"
+                    >Dias para proxima cuota: {{diferenciaEnDias |
+                    async}}</ion-card-title
+                  >
+                </ion-card-content>
+              </ion-card>
+            </ion-row>
+          </ion-card>
+        </ion-grid>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6"> </ion-col>
+            <ion-col size="6"> </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-content>
     </ion-content>
-       
-    
-    </ion-content>
-    
   </ng-template>
 </ion-modal>
+
+<ion-modal md="ios" #modalTurnos>
+  <ng-template>
+    <ion-header color="primary">
+      <ion-toolbar color="primary">
+        <ion-buttons color="secondary" slot="start">
+          <ion-button color="tertiary" (click)="cerrarModalTurnos()"
+            ><ion-icon name="arrow-back-outline"></ion-icon
+          ></ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-header class="ion-no-border">
+      <ion-toolbar color="primary">
+        <ion-title mode="md" class="ion-no-padding">
+          <ion-label>
+            <ion-text color="secondary">Detalles</ion-text>
+            <p>
+              <ion-text color="white"><strong>Turnos</strong></ion-text>
+            </p>
+          </ion-label>
+        </ion-title>
+        <ion-avatar slot="end">
+          <img src="./assets/img/PrestaIconoPositivo.png" />
+        </ion-avatar>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content scrollY="true" mode="ios" color="primary">
+      <ion-content color="primary">
+        <ion-grid>
+          <ion-card>
+            <img
+              alt="Silhouette of mountains"
+              src="./assets/img/PrestaEnviar.png"
+            />
+            <ion-row>
+              <ion-col>
+                <ion-card
+                  class="ion-padding"
+                  *ngFor="let turno of turnos"
+                  color="success"
+                >
+                  <ion-card-content class="ion-text-center">
+                    <ion-card-subtitle>
+                      Turno {{turno.id}}: {{turno.fechaDeturno.toDate() | date
+                      }}
+
+                      <ion-card-title
+                        class="custom-input"
+                        style="font-size: 12px"
+                        >{{turno.nombre}}<ion-button
+                          (click)="openModalPagar(turno)"
+                          style="font-size: 8px"
+                          >Pagar cuota</ion-button
+                        ></ion-card-title
+                      >
+                    </ion-card-subtitle>
+                    <ion-card-subtitle>
+                      <ion-card-title
+                        class="custom-input"
+                        style="font-size: 12px"
+                      >
+                        Dias restantes: {{turno.diferenciaEnDiasDetalles
+                        }}</ion-card-title
+                      >
+                    </ion-card-subtitle>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+            <ion-row> </ion-row>
+          </ion-card>
+        </ion-grid>
+      </ion-content>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-modal #modalPagar>
+  <ng-template>
+    <ion-header color="primary">
+      <ion-toolbar color="primary">
+        <ion-buttons color="secondary" slot="start">
+          <ion-button color="tertiary" (click)="cerrarModalPagar()"
+            ><ion-icon name="arrow-back-outline"></ion-icon
+          ></ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-header class="ion-no-border">
+      <ion-toolbar color="primary">
+        <ion-title mode="md" class="ion-no-padding">
+          <ion-label>
+            <ion-text color="secondary">Pagar</ion-text>
+            <p>
+              <ion-text color="white"><strong>Cuotas</strong></ion-text>
+            </p>
+          </ion-label>
+        </ion-title>
+        <ion-avatar slot="end">
+          <img src="./assets/img/PrestaIconoPositivo.png" />
+        </ion-avatar>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content scrollY="true" mode="ios" color="primary">
+      <ion-content color="primary">
+        <ion-grid>
+          <ion-card>
+            <img
+              alt="Silhouette of mountains"
+              src="./assets/img/PrestaEnviar.png"
+            />
+            <ion-row>
+              <ion-col>
+                <ion-card color="success">
+                  <ion-card-content>
+                    <ion-card-subtitle style="text-align: center">
+                      Turno {{turno.id}}: {{turno.fechaDeturno.toDate() | date}}
+
+                      <ion-card-subtitle>
+                        <ion-input
+                          color="success"
+                          [value]="turno.nombre"
+                          readonly
+                          class="custom-inputinput"
+                          style="font-size: 16px; text-align: center"
+                        ></ion-input
+                      ></ion-card-subtitle>
+                    </ion-card-subtitle>
+                    <ion-card-subtitle> </ion-card-subtitle>
+                  </ion-card-content>
+                </ion-card>
+                <ion-card class="ion-padding">
+                  <ion-card-content class="ion-text-center">
+                    <ion-card-subtitle style="text-align: center">
+                      Monto a debitar ($):
+
+                      <ion-input
+                        [value]="alcanciaSeleccionada.alcancia.montoCuotas"
+                        type="number"
+                        class="custom-input"
+                        style="font-size: 72px; text-align: center"
+                      ></ion-input>
+                    </ion-card-subtitle>
+                    <ion-card-subtitle>
+                      <ion-button
+                        (click)="pagarCuota(turno.nombre, alcanciaSeleccionada.alcancia.montoCuotas, alcanciaSeleccionada.id, turno.id)"
+                        color="success"
+                        >Pagar</ion-button
+                      >
+                    </ion-card-subtitle>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+            <ion-row> </ion-row>
+          </ion-card>
+        </ion-grid>
+      </ion-content>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-modal #modalPagosTurnos>
+  <ng-template>
+    <ion-header color="primary">
+      <ion-toolbar color="primary">
+        <ion-buttons color="secondary" slot="start">
+          <ion-button color="tertiary" (click)="cerrarModalPagosTurnos()"
+            ><ion-icon name="arrow-back-outline"></ion-icon
+          ></ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-header class="ion-no-border">
+      <ion-toolbar color="primary">
+        <ion-title mode="md" class="ion-no-padding">
+          <ion-label>
+            <ion-text color="secondary">Detalles</ion-text>
+            <p>
+              <ion-text color="white"><strong>Turnos</strong></ion-text>
+            </p>
+          </ion-label>
+        </ion-title>
+        <ion-avatar slot="end">
+          <img src="./assets/img/PrestaIconoPositivo.png" />
+        </ion-avatar>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content mode="ios" color="primary">
+      <ion-grid class="gridoption">
+        <ion-card>
+          <ion-card-header>
+            <img
+              alt="Silhouette of mountains"
+              src="./assets/img/PrestaTurnosAlcancia.png"
+          /></ion-card-header>
+
+          <ion-row color="primary" class="scroll-x">
+            <div class="horizontal-scroll">
+              <ion-col *ngFor="let turno of turnos">
+                <ion-card color="success">
+                  <ion-card-content>
+                    <ion-card-subtitle style="text-align: center">
+                      Turno {{turno.id}}: {{turno.fechaDeturno.toDate() | date}}
+
+                      <ion-card-title
+                        class="custom-input"
+                        style="font-size: 16px; text-align: center"
+                        >{{turno.nombre}}</ion-card-title
+                      >
+                    </ion-card-subtitle>
+                    <ion-card-subtitle> </ion-card-subtitle>
+                  </ion-card-content>
+                </ion-card>
+                <ion-card class="ion-padding">
+                  <ion-card-content class="ion-text-center">
+                    <ion-card class="ion-padding"
+                      ><ion-card-content>
+                        <ion-card-subtitle
+                          *ngIf="filtrarTransaccionesPorTurno(turno.id).length > 0"
+                          color="success"
+                          style="text-align: center"
+                        >
+                          Pagos registrados:
+
+                          <ion-card-title
+                            *ngFor="let transaccion of filtrarTransaccionesPorTurno(turno.id)"
+                            class="custom-input"
+                            style="font-size: 14px; text-align: center"
+                            >{{transaccion.remitente.nombres}}</ion-card-title
+                          >
+                        </ion-card-subtitle>
+                      </ion-card-content></ion-card
+                    >
+                    <ion-card class="ion-padding">
+                      <ion-card-content>
+                        <ion-card-subtitle
+                          color="warning"
+                          style="text-align: center"
+                        >
+                          Integrantes:
+
+                          <ion-card-title
+                            *ngFor="let integrante of datosAlcancia.integrantes"
+                            class="custom-input"
+                            style="font-size: 14px; text-align: center"
+                            >{{integrante.nombres}}</ion-card-title
+                          >
+                        </ion-card-subtitle>
+                      </ion-card-content>
+                    </ion-card>
+                  </ion-card-content></ion-card
+                >
+              </ion-col>
+            </div>
+          </ion-row>
+        </ion-card>
+      </ion-grid>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-modal #modalEditarAlcanciaDinero>
+  <ng-template>
+    <ion-header color="primary">
+      <ion-toolbar color="primary">
+        <ion-buttons color="secondary" slot="start">
+          <ion-button
+            color="tertiary"
+            (click)="cancelModalEditarAlcanciaDinero()"
+            ><ion-icon name="arrow-back-outline"></ion-icon
+          ></ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-header class="ion-no-border">
+      <ion-toolbar color="primary">
+        <ion-title mode="md" class="ion-no-padding">
+          <ion-label>
+            <ion-text color="secondary">Editar</ion-text>
+            <p>
+              <ion-text color="white"><strong>Alcancia</strong></ion-text>
+            </p>
+          </ion-label>
+        </ion-title>
+        <ion-avatar slot="end">
+          <img src="./assets/img/PrestaIconoNegativo.png" />
+        </ion-avatar>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content mode="ios" color="primary">
+      <ion-card color="primary">
+        <ion-card-content>
+          <ion-list-header class="ion-tex-center"
+            ><img src="./assets/img/bannerintegrantes.png" alt=""
+          /></ion-list-header>
+          <ion-list [inset]="true">
+            <ion-item *ngFor="let integrante of datosAlcancia.integrantes">
+              <ion-label>{{integrante.nombres}} </ion-label>
+              <ion-button slot="end">Eliminar</ion-button>
+            </ion-item>
+          </ion-list>
+
+          <h2 class="ion-text-center">
+            Al eliminar el integrante, queda disponible su turno. Al ingresar un
+            nuevo integrante en el turno correspondiente, este debera cancelar
+            los turnos ya avanzados.
+          </h2>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card color="primary">
+        <a href=""><img src="./assets/img/finalizar.png" alt="" /></a>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <h2 class="ion-text-center">
+                  Puedes eliminar la alcancia una vez se hayan cumplido todos
+                  los turnos ó si aún no se ha integrado ningún usuario.
+                </h2>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-button
+        expand="block"
+        color="secondary"
+        class="ion-text-center"
+        slot="center"
+        >Confirmar</ion-button
+      >
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+
+<!-----------------------------------------------------------------Alcancias Prodcutos-------------------------------------------------------------------------------------------------------->
 
 <ion-modal mode="ios" #modalProductos>
   <ng-template>
     <ion-header color="primary">
       <ion-toolbar color="primary">
         <ion-buttons color="secondary" slot="start">
-          <ion-button color="tertiary" (click)="cerrarDetallesProductos()"  ><ion-icon name="arrow-back-outline"></ion-icon></ion-button>
+          <ion-button color="tertiary" (click)="cerrarDetallesProductos()"
+            ><ion-icon name="arrow-back-outline"></ion-icon
+          ></ion-button>
         </ion-buttons>
-        
       </ion-toolbar>
     </ion-header>
     <ion-header class="ion-no-border">
       <ion-toolbar color="primary">
         <ion-title mode="md" class="ion-no-padding">
-          <ion-label >
+          <ion-label>
             <ion-text color="secondary">Detalles</ion-text>
-            <p><ion-text color="white"><strong>Alcancia</strong></ion-text></p>
-            
+            <p>
+              <ion-text color="white"><strong>Producto</strong></ion-text>
+            </p>
           </ion-label>
         </ion-title>
         <ion-avatar slot="end">
@@ -277,128 +621,312 @@
         </ion-avatar>
       </ion-toolbar>
     </ion-header>
-    
+
     <ion-content scrollY="true" mode="ios" color="primary">
-     
-    
-     <ion-content color="primary">
-      
-    <ion-grid>
-      
-      <ion-card>
-        <img alt="Silhouette of mountains" src="{{alcanciaSeleccionada.alcancia.url}}" />
-        <ion-card color="white">
-          <ion-card-content>
-        <ion-card-title  style="font-size: 14px;">ID: {{alcanciaSeleccionada.id}} <ion-button style="font-size: 12px;" (click)="copiarAlcanciaId(alcanciaSeleccionada.id)">Copiar ID</ion-button></ion-card-title>
-        
-      </ion-card-content>
-      </ion-card>
-      <ion-row>
-        <ion-col>
-    <ion-card>
-      <ion-card-content>
-      <ion-card-subtitle>
-        Monto a recibir: 
-       
-          <ion-card-title class="custom-input" style="font-size: 32px;">${{alcanciaSeleccionada.alcancia.costoProducto}}</ion-card-title>
-       
-      </ion-card-subtitle>
-    </ion-card-content>
-    </ion-card>
-    <ion-card>
-    <ion-button (click)="openModalTurnosProductos()">
-      Pagar cuotas
-    </ion-button>
-    <ion-button (click)="openModalPagosTurnosProductos(alcanciaSeleccionada)" >Ver turnos</ion-button>
-    </ion-card>
-    <ion-card *ngIf="docId && fechaDeturno">
-      <ion-card-content>
-        <ion-card-title style="font-size: 18px;">Tu turno: Turno {{docId}} | Fecha:{{fechaDeturno | date}}</ion-card-title>
-        <ion-card-subtitle></ion-card-subtitle>
-        
-        
-      </ion-card-content>
-    </ion-card>
-    </ion-col>
-    <ion-col>
-    <ion-card>
-      <ion-card-content>
-        <ion-card-title>${{alcanciaSeleccionada.alcancia.montoCuotas}}</ion-card-title>
-        <ion-card-subtitle>Cuotas</ion-card-subtitle>
-        
-      </ion-card-content>
-    </ion-card>
-    <ion-card>
-      <ion-card-content>
-        <ion-card-title>{{abonado}}$</ion-card-title>
-        <ion-card-subtitle>Abonado</ion-card-subtitle>
-      </ion-card-content>
-    </ion-card>
-    <ion-card *ngIf="turnoSeleccionado">
-      <ion-card-content>
-        <ion-card-title style="font-size: 18px;">Turno {{turnoSeleccionado.id}} de {{alcanciaSeleccionada.alcancia.integrantes}} | Fecha:{{turnoSeleccionado.data.fechaDeturno | date}}</ion-card-title>
-        <ion-card-subtitle>Turno actual:<hr>{{turnoSeleccionado.data.nombre}}</ion-card-subtitle>
-        
-      </ion-card-content>
-    </ion-card>
-    </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-card color="success">
-        <ion-card-content>
-      <ion-card-title  style="font-size: 20px;">Dias para proxima cuota: {{diferenciaEnDias | async}}</ion-card-title>
-    </ion-card-content>
-    </ion-card>
-    </ion-row>
-    
-    </ion-card>
-    </ion-grid>
-    <ion-grid>
-      
-      <ion-row>
-       <ion-col size="6">
-        
-       </ion-col>
-       <ion-col size="6">
-       
-    
-       </ion-col>
-    </ion-row>
-    </ion-grid>
-    
+      <ion-content color="primary">
+        <ion-grid>
+          <ion-card>
+            <img
+              alt="Silhouette of mountains"
+              src="{{alcanciaSeleccionada.alcancia.url}}"
+            />
+            <ion-card-title
+              >{{alcanciaSeleccionada.alcancia.nombreProducto}}</ion-card-title
+            >
+            <ion-card color="white">
+              <ion-card-content>
+                <ion-card-title style="font-size: 14px"
+                  >ID: {{alcanciaSeleccionada.id}}
+                  <ion-button
+                    style="font-size: 12px"
+                    (click)="copiarAlcanciaId(alcanciaSeleccionada.id)"
+                    >Copiar ID</ion-button
+                  ></ion-card-title
+                >
+              </ion-card-content>
+            </ion-card>
+            <ion-row>
+              <ion-col>
+                <ion-card>
+                  <ion-card-content>
+                    <ion-card-subtitle>
+                      Precio:
+
+                      <ion-card-title
+                        class="custom-input"
+                        style="font-size: 32px"
+                        >${{alcanciaSeleccionada.alcancia.costoProducto}}</ion-card-title
+                      >
+                    </ion-card-subtitle>
+                  </ion-card-content>
+                </ion-card>
+                <ion-card>
+                  <ion-button (click)="openModalTurnosProductos()">
+                    Pagar cuotas
+                  </ion-button>
+                  <ion-button
+                    (click)="openModalPagosTurnosProductos(alcanciaSeleccionada)"
+                    >Ver turnos</ion-button
+                  >
+                </ion-card>
+                <ion-card>
+                  <ion-button
+                    *ngIf="alcanciaSeleccionada.creador.uid === user.uid"
+                    (click)="openModalEditarAlcanciaProductos(alcanciaSeleccionada)"
+                    >Editar alcancía</ion-button
+                  >
+                </ion-card>
+                <ion-card *ngIf="docId && fechaDeturno">
+                  <ion-card-content>
+                    <ion-card-title style="font-size: 18px"
+                      >Tu turno: Turno {{docId}} | Fecha:{{fechaDeturno |
+                      date}}</ion-card-title
+                    >
+                    <ion-card-subtitle></ion-card-subtitle>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+              <ion-col>
+                <ion-card>
+                  <ion-card-content>
+                    <ion-card-title
+                      >${{alcanciaSeleccionada.alcancia.montoCuotas}}</ion-card-title
+                    >
+                    <ion-card-subtitle>Cuotas</ion-card-subtitle>
+                  </ion-card-content>
+                </ion-card>
+                <ion-card>
+                  <ion-card-content>
+                    <ion-card-title>{{abonado}}$</ion-card-title>
+                    <ion-card-subtitle>Abonado</ion-card-subtitle>
+                  </ion-card-content>
+                </ion-card>
+                <ion-card *ngIf="turnoSeleccionado">
+                  <ion-card-content>
+                    <ion-card-title style="font-size: 18px"
+                      >Turno {{turnoSeleccionado.id}} de
+                      {{alcanciaSeleccionada.alcancia.integrantes}} |
+                      Fecha:{{turnoSeleccionado.data.fechaDeturno |
+                      date}}</ion-card-title
+                    >
+                    <ion-card-subtitle
+                      >Turno actual:
+                      <hr />
+                      {{turnoSeleccionado.data.nombre}}</ion-card-subtitle
+                    >
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-card color="success">
+                <ion-card-content>
+                  <ion-card-title style="font-size: 20px"
+                    >Dias para proxima cuota: {{diferenciaEnDias |
+                    async}}</ion-card-title
+                  >
+                </ion-card-content>
+              </ion-card>
+            </ion-row>
+          </ion-card>
+        </ion-grid>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6"> </ion-col>
+            <ion-col size="6"> </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-content>
     </ion-content>
-       
-    
+  </ng-template>
+</ion-modal>
+
+
+<ion-modal md="ios" #modalTurnosProductos>
+  <ng-template>
+    <ion-header color="primary">
+      <ion-toolbar color="primary">
+        <ion-buttons color="secondary" slot="start">
+          <ion-button color="tertiary" (click)="cancelModalTurnosProductos()"
+            ><ion-icon name="arrow-back-outline"></ion-icon
+          ></ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-header class="ion-no-border">
+      <ion-toolbar color="primary">
+        <ion-title mode="md" class="ion-no-padding">
+          <ion-label>
+            <ion-text color="secondary">Detalles</ion-text>
+            <p>
+              <ion-text color="white"><strong>Turnos</strong></ion-text>
+            </p>
+          </ion-label>
+        </ion-title>
+        <ion-avatar slot="end">
+          <img src="./assets/img/PrestaIconoPositivo.png" />
+        </ion-avatar>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content scrollY="true" mode="ios" color="primary">
+      <ion-content color="primary">
+        <ion-grid>
+          <ion-card>
+            <img
+              alt="Silhouette of mountains"
+              src="./assets/img/PrestaEnviar.png"
+            />
+            <ion-row>
+              <ion-col>
+                <ion-card
+                  class="ion-padding"
+                  *ngFor="let turno of turnos"
+                  color="success"
+                >
+                  <ion-card-content class="ion-text-center">
+                    <ion-card-subtitle>
+                      Turno {{turno.id}}: {{turno.fechaDeturno.toDate() | date
+                      }}
+
+                      <ion-card-title
+                        class="custom-input"
+                        style="font-size: 12px"
+                        >{{turno.nombre}}<ion-button
+                          (click)="openModalPagarProductos(turno)"
+                          style="font-size: 8px"
+                          >Pagar cuota</ion-button
+                        ></ion-card-title
+                      >
+                    </ion-card-subtitle>
+                    <ion-card-subtitle>
+                      <ion-card-title
+                        class="custom-input"
+                        style="font-size: 12px"
+                      >
+                        Dias restantes: {{turno.diferenciaEnDiasDetalles
+                        }}</ion-card-title
+                      >
+                    </ion-card-subtitle>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+            <ion-row> </ion-row>
+          </ion-card>
+        </ion-grid>
+      </ion-content>
     </ion-content>
-    
+  </ng-template>
+</ion-modal>
+
+<ion-modal #modalPagarProductos>
+  <ng-template>
+    <ion-header color="primary">
+      <ion-toolbar color="primary">
+        <ion-buttons color="secondary" slot="start">
+          <ion-button color="tertiary" (click)="cancelModalPagarProductos()"
+            ><ion-icon name="arrow-back-outline"></ion-icon
+          ></ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-header class="ion-no-border">
+      <ion-toolbar color="primary">
+        <ion-title mode="md" class="ion-no-padding">
+          <ion-label>
+            <ion-text color="secondary">Pagar</ion-text>
+            <p>
+              <ion-text color="white"><strong>Cuotas</strong></ion-text>
+            </p>
+          </ion-label>
+        </ion-title>
+        <ion-avatar slot="end">
+          <img src="./assets/img/PrestaIconoPositivo.png" />
+        </ion-avatar>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content scrollY="true" mode="ios" color="primary">
+      <ion-content color="primary">
+        <ion-grid>
+          <ion-card>
+            <img
+              alt="Silhouette of mountains"
+              src="./assets/img/PrestaEnviar.png"
+            />
+            <ion-row>
+              <ion-col>
+                <ion-card color="success">
+                  <ion-card-content>
+                    <ion-card-subtitle style="text-align: center">
+                      Turno {{turno.id}}: {{turno.fechaDeturno.toDate() | date}}
+
+                      <ion-card-subtitle>
+                        <ion-input
+                          color="success"
+                          [value]="alcanciaSeleccionada.creador.id"
+                          readonly
+                          class="custom-inputinput"
+                          style="font-size: 16px; text-align: center"
+                        ></ion-input
+                      ></ion-card-subtitle>
+                    </ion-card-subtitle>
+                    <ion-card-subtitle> </ion-card-subtitle>
+                  </ion-card-content>
+                </ion-card>
+                <ion-card class="ion-padding">
+                  <ion-card-content class="ion-text-center">
+                    <ion-card-subtitle style="text-align: center">
+                      Monto a debitar ($):
+
+                      <ion-input
+                        [value]="alcanciaSeleccionada.alcancia.montoCuotas"
+                        type="number"
+                        class="custom-input"
+                        style="font-size: 72px; text-align: center"
+                      ></ion-input>
+                    </ion-card-subtitle>
+                    <ion-card-subtitle>
+                      <ion-button
+                        (click)="pagarCuota(alcanciaSeleccionada.creador.id, alcanciaSeleccionada.alcancia.montoCuotas, alcanciaSeleccionada.id, turno.id)"
+                        color="success"
+                        >Pagar</ion-button
+                      >
+                    </ion-card-subtitle>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+            <ion-row> </ion-row>
+          </ion-card>
+        </ion-grid>
+      </ion-content>
+    </ion-content>
   </ng-template>
 </ion-modal>
 
 
 
-
-
-
-
-
-<ion-modal md="ios" #modalTurnos>
+<ion-modal #modalPagosTurnosProductos>
   <ng-template>
-    
     <ion-header color="primary">
       <ion-toolbar color="primary">
         <ion-buttons color="secondary" slot="start">
-          <ion-button color="tertiary" (click)="cerrarModalTurnos()" ><ion-icon name="arrow-back-outline"></ion-icon></ion-button>
+          <ion-button color="tertiary" (click)="cerrarModalPagosTurnos()"
+            ><ion-icon name="arrow-back-outline"></ion-icon
+          ></ion-button>
         </ion-buttons>
-        
       </ion-toolbar>
     </ion-header>
     <ion-header class="ion-no-border">
       <ion-toolbar color="primary">
         <ion-title mode="md" class="ion-no-padding">
-          <ion-label >
+          <ion-label>
             <ion-text color="secondary">Detalles</ion-text>
-            <p><ion-text color="white"><strong>Turnos</strong></ion-text></p>
-            
+            <p>
+              <ion-text color="white"><strong>Turnos</strong></ion-text>
+            </p>
           </ion-label>
         </ion-title>
         <ion-avatar slot="end">
@@ -406,534 +934,155 @@
         </ion-avatar>
       </ion-toolbar>
     </ion-header>
-    
-    <ion-content scrollY="true" mode="ios" color="primary">
-     
-    
-     <ion-content color="primary">
-      
-    <ion-grid>
-      
-      <ion-card>
-        <img alt="Silhouette of mountains" src="./assets/img/PrestaEnviar.png" />
-      <ion-row>
-        <ion-col>
-    <ion-card class="ion-padding" *ngFor="let turno of turnos" color="success">
-      <ion-card-content class="ion-text-center">
-      <ion-card-subtitle>
-        Turno {{turno.id}}: {{turno.fechaDeturno.toDate() | date }} 
-       
-          <ion-card-title class="custom-input" style="font-size: 12px;">{{turno.nombre}}<ion-button (click)="openModalPagar(turno)" style="font-size: 8px;">Pagar cuota</ion-button></ion-card-title>
-       
-      </ion-card-subtitle>
-      <ion-card-subtitle>
-       
-       
-        <ion-card-title class="custom-input" style="font-size: 12px;"> Dias restantes: {{turno.diferenciaEnDiasDetalles }}</ion-card-title>
-     
-    </ion-card-subtitle>
-    </ion-card-content>
-    </ion-card>
-    
-    
-    </ion-col>
-    
-    </ion-row>
-    <ion-row>
-     
-    </ion-row>
-    
-    </ion-card>
-    </ion-grid>
-    
-    </ion-content>
-       
-    
-    </ion-content>
-    
-        
-      </ng-template>
-    </ion-modal>
 
-    <ion-modal #modalPagar>
-      <ng-template >
+    <ion-content mode="ios" color="primary">
+      <ion-grid class="gridoption">
+        <ion-card>
+          <ion-card-header>
+            <img
+              alt="Silhouette of mountains"
+              src="./assets/img/PrestaTurnosAlcancia.png"
+          /></ion-card-header>
 
-        <ion-header color="primary">
-          <ion-toolbar color="primary">
-            <ion-buttons color="secondary" slot="start">
-              <ion-button color="tertiary" (click)="cerrarModalPagar()" ><ion-icon name="arrow-back-outline"></ion-icon></ion-button>
-            </ion-buttons>
-            
-          </ion-toolbar>
-        </ion-header>
-        <ion-header class="ion-no-border">
-          <ion-toolbar color="primary">
-            <ion-title mode="md" class="ion-no-padding">
-              <ion-label >
-                <ion-text color="secondary">Pagar</ion-text>
-                <p><ion-text color="white"><strong>Cuotas</strong></ion-text></p>
-                
-              </ion-label>
-            </ion-title>
-            <ion-avatar slot="end">
-              <img src="./assets/img/PrestaIconoPositivo.png" />
-            </ion-avatar>
-          </ion-toolbar>
-        </ion-header>
-        
-        <ion-content scrollY="true" mode="ios" color="primary">
-         
-        
-         <ion-content color="primary">
-          
-        <ion-grid>
-          
-          <ion-card>
-            <img alt="Silhouette of mountains" src="./assets/img/PrestaEnviar.png" />
-          <ion-row>
-            <ion-col>
-        <ion-card color="success">
-          <ion-card-content>
-          <ion-card-subtitle style="text-align: center;">
-            Turno {{turno.id}}: {{turno.fechaDeturno.toDate() | date}}
-           
-           
-         <ion-card-subtitle> <ion-input color="success" [value]="turno.nombre" readonly class="custom-inputinput" style="font-size: 16px; text-align: center;"></ion-input></ion-card-subtitle>
-           
-          </ion-card-subtitle>
-          <ion-card-subtitle>
-           
-            
-            
-         
-        </ion-card-subtitle>
-        </ion-card-content>
-        </ion-card>
-        <ion-card class="ion-padding">
-          <ion-card-content class="ion-text-center">
-            <ion-card-subtitle style="text-align: center;">
-             Monto a debitar ($):
-
-                
-             
-                <ion-input [value]="alcanciaSeleccionada.alcancia.montoCuotas" type="number" class="custom-input" style="font-size: 72px; text-align: center;"></ion-input>
-             
-            </ion-card-subtitle>
-            <ion-card-subtitle>
-             
-              <ion-button (click)="pagarCuota(turno.nombre, alcanciaSeleccionada.alcancia.montoCuotas, alcanciaSeleccionada.id, turno.id)" color="success">Pagar</ion-button>
-              
-           
-          </ion-card-subtitle>
-          </ion-card-content>
-        </ion-card>
-        </ion-col>
-        
-        </ion-row>
-        <ion-row>
-         
-        </ion-row>
-        
-        </ion-card>
-        </ion-grid>
-        
-        </ion-content>
-           
-        
-        </ion-content>
-        
-
-
-
-
-      </ng-template>
-      
-    </ion-modal>
-
-    
-    <ion-modal md="ios" #modalTurnosProductos>
-      <ng-template>
-        
-        <ion-header color="primary">
-          <ion-toolbar color="primary">
-            <ion-buttons color="secondary" slot="start">
-              <ion-button color="tertiary" (click)="cancelModalTurnosProductos()" ><ion-icon name="arrow-back-outline"></ion-icon></ion-button>
-            </ion-buttons>
-            
-          </ion-toolbar>
-        </ion-header>
-        <ion-header class="ion-no-border">
-          <ion-toolbar color="primary">
-            <ion-title mode="md" class="ion-no-padding">
-              <ion-label >
-                <ion-text color="secondary">Detalles</ion-text>
-                <p><ion-text color="white"><strong>Turnos</strong></ion-text></p>
-                
-              </ion-label>
-            </ion-title>
-            <ion-avatar slot="end">
-              <img src="./assets/img/PrestaIconoPositivo.png" />
-            </ion-avatar>
-          </ion-toolbar>
-        </ion-header>
-        
-        <ion-content scrollY="true" mode="ios" color="primary">
-         
-        
-         <ion-content color="primary">
-          
-        <ion-grid>
-          
-          <ion-card>
-            <img alt="Silhouette of mountains" src="./assets/img/PrestaEnviar.png" />
-          <ion-row>
-            <ion-col>
-        <ion-card class="ion-padding" *ngFor="let turno of turnos" color="success">
-          <ion-card-content class="ion-text-center">
-          <ion-card-subtitle>
-            Turno {{turno.id}}: {{turno.fechaDeturno.toDate() | date }} 
-           
-              <ion-card-title class="custom-input" style="font-size: 12px;">{{turno.nombre}}<ion-button (click)="openModalPagarProductos(turno)" style="font-size: 8px;">Pagar cuota</ion-button></ion-card-title>
-           
-          </ion-card-subtitle>
-          <ion-card-subtitle>
-           
-           
-            <ion-card-title class="custom-input" style="font-size: 12px;"> Dias restantes: {{turno.diferenciaEnDiasDetalles }}</ion-card-title>
-         
-        </ion-card-subtitle>
-        </ion-card-content>
-        </ion-card>
-        
-        
-        </ion-col>
-        
-        </ion-row>
-        <ion-row>
-         
-        </ion-row>
-        
-        </ion-card>
-        </ion-grid>
-        
-        </ion-content>
-           
-        
-        </ion-content>
-        
-            
-          </ng-template>
-        </ion-modal>
-
-
-
-
-
-    <ion-modal #modalPagarProductos>
-      <ng-template >
-
-        <ion-header color="primary">
-          <ion-toolbar color="primary">
-            <ion-buttons color="secondary" slot="start">
-              <ion-button color="tertiary" (click)="cancelModalPagarProductos()" ><ion-icon name="arrow-back-outline"></ion-icon></ion-button>
-            </ion-buttons>
-            
-          </ion-toolbar>
-        </ion-header>
-        <ion-header class="ion-no-border">
-          <ion-toolbar color="primary">
-            <ion-title mode="md" class="ion-no-padding">
-              <ion-label >
-                <ion-text color="secondary">Pagar</ion-text>
-                <p><ion-text color="white"><strong>Cuotas</strong></ion-text></p>
-                
-              </ion-label>
-            </ion-title>
-            <ion-avatar slot="end">
-              <img src="./assets/img/PrestaIconoPositivo.png" />
-            </ion-avatar>
-          </ion-toolbar>
-        </ion-header>
-        
-        <ion-content scrollY="true" mode="ios" color="primary">
-         
-        
-         <ion-content color="primary">
-          
-        <ion-grid>
-          
-          <ion-card>
-            <img alt="Silhouette of mountains" src="./assets/img/PrestaEnviar.png" />
-          <ion-row>
-            <ion-col>
-        <ion-card color="success">
-          <ion-card-content>
-          <ion-card-subtitle style="text-align: center;">
-            Turno {{turno.id}}: {{turno.fechaDeturno.toDate() | date}}
-           
-           
-         <ion-card-subtitle> <ion-input color="success" [value]="alcanciaSeleccionada.creador.id" readonly class="custom-inputinput" style="font-size: 16px; text-align: center;"></ion-input></ion-card-subtitle>
-           
-          </ion-card-subtitle>
-          <ion-card-subtitle>
-           
-            
-            
-         
-        </ion-card-subtitle>
-        </ion-card-content>
-        </ion-card>
-        <ion-card class="ion-padding">
-          <ion-card-content class="ion-text-center">
-            <ion-card-subtitle style="text-align: center;">
-             Monto a debitar ($):
-
-                
-             
-                <ion-input [value]="alcanciaSeleccionada.alcancia.montoCuotas" type="number" class="custom-input" style="font-size: 72px; text-align: center;"></ion-input>
-             
-            </ion-card-subtitle>
-            <ion-card-subtitle>
-             
-              <ion-button (click)="pagarCuota(alcanciaSeleccionada.creador.id, alcanciaSeleccionada.alcancia.montoCuotas, alcanciaSeleccionada.id, turno.id)" color="success">Pagar</ion-button>
-              
-           
-          </ion-card-subtitle>
-          </ion-card-content>
-        </ion-card>
-        </ion-col>
-        
-        </ion-row>
-        <ion-row>
-         
-        </ion-row>
-        
-        </ion-card>
-        </ion-grid>
-        
-        </ion-content>
-           
-        
-        </ion-content>
-        
-
-
-
-
-      </ng-template>
-      
-    </ion-modal>
-
-
-
-
-
-
-    <ion-modal #modalPagosTurnos>
-      <ng-template >
-        <ion-header color="primary">
-          <ion-toolbar color="primary">
-            <ion-buttons color="secondary" slot="start">
-              <ion-button color="tertiary" (click)="cerrarModalPagosTurnos()"  ><ion-icon name="arrow-back-outline"></ion-icon></ion-button>
-            </ion-buttons>
-            
-          </ion-toolbar>
-        </ion-header>
-        <ion-header class="ion-no-border">
-          <ion-toolbar color="primary">
-            <ion-title mode="md" class="ion-no-padding">
-              <ion-label >
-                <ion-text color="secondary">Detalles</ion-text>
-                <p><ion-text color="white"><strong>Turnos</strong></ion-text></p>
-                
-              </ion-label>
-            </ion-title>
-            <ion-avatar slot="end">
-              <img src="./assets/img/PrestaIconoPositivo.png" />
-            </ion-avatar>
-          </ion-toolbar>
-        </ion-header>
-        
-        <ion-content mode="ios" color="primary">
-         
-        
-         
-          
-        <ion-grid class="gridoption">
-          
-          <ion-card> 
-            <ion-card-header>
-            <img alt="Silhouette of mountains" src="./assets/img/PrestaTurnosAlcancia.png" /></ion-card-header>
-            
-            
           <ion-row color="primary" class="scroll-x">
             <div class="horizontal-scroll">
-            
-        <ion-col *ngFor="let turno of turnos" >
-        <ion-card  color="success">
-          <ion-card-content>
-        
-            
-          <ion-card-subtitle style="text-align: center;">
-            Turno {{turno.id}}: {{turno.fechaDeturno.toDate() | date}}
-           
-              <ion-card-title class="custom-input" style="font-size: 16px; text-align: center;">{{turno.nombre}}</ion-card-title>
-           
-          </ion-card-subtitle>
-          <ion-card-subtitle>
-           
-            
-            
-         
-        </ion-card-subtitle>
-        </ion-card-content>
-        </ion-card>
-        <ion-card  class="ion-padding">
-          <ion-card-content class="ion-text-center">
-            <ion-card class="ion-padding"><ion-card-content>
-            <ion-card-subtitle *ngIf="filtrarTransaccionesPorTurno(turno.id).length > 0"  color="success" style="text-align: center;">
-             Pagos registrados:
-             
-                <ion-card-title *ngFor="let transaccion of filtrarTransaccionesPorTurno(turno.id)"  class="custom-input" style="font-size: 14px; text-align: center;">{{transaccion.remitente.nombres}}</ion-card-title>
-             
-            </ion-card-subtitle>
-          </ion-card-content></ion-card>
-          <ion-card  class="ion-padding">
-            <ion-card-content>
-            <ion-card-subtitle color="warning" style="text-align: center;">
-              Integrantes:
-              
-                 <ion-card-title *ngFor="let integrante of datosAlcancia.integrantes" class="custom-input" style="font-size: 14px; text-align: center;"
-                 >{{integrante.nombres}}</ion-card-title>
-                 
-              
-             </ion-card-subtitle>
-           
-          </ion-card-content>
-        </ion-card>
-        </ion-card-content></ion-card>
-        </ion-col>
-        
-      
-        
-        </div>
-        
-        </ion-row>
-        
-        
-        </ion-card>
-        </ion-grid>
-        
-        
-           
-        
-        </ion-content>
-        
-      </ng-template>
-      
-    </ion-modal>
+              <ion-col *ngFor="let turno of turnos">
+                <ion-card color="success">
+                  <ion-card-content>
+                    <ion-card-subtitle style="text-align: center">
+                      Turno {{turno.id}}: {{turno.fechaDeturno.toDate() | date}}
 
+                      <ion-card-title
+                        class="custom-input"
+                        style="font-size: 16px; text-align: center"
+                        >{{turno.nombre}}</ion-card-title
+                      >
+                    </ion-card-subtitle>
+                    <ion-card-subtitle> </ion-card-subtitle>
+                  </ion-card-content>
+                </ion-card>
+                <ion-card class="ion-padding">
+                  <ion-card-content class="ion-text-center">
+                    <ion-card class="ion-padding"
+                      ><ion-card-content>
+                        <ion-card-subtitle
+                          *ngIf="filtrarTransaccionesPorTurno(turno.id).length > 0"
+                          color="success"
+                          style="text-align: center"
+                        >
+                          Pagos registrados:
 
-    <ion-modal #modalPagosTurnosProductos>
-      <ng-template >
-        <ion-header color="primary">
-          <ion-toolbar color="primary">
-            <ion-buttons color="secondary" slot="start">
-              <ion-button color="tertiary" (click)="cerrarModalPagosTurnos()"  ><ion-icon name="arrow-back-outline"></ion-icon></ion-button>
-            </ion-buttons>
-            
-          </ion-toolbar>
-        </ion-header>
-        <ion-header class="ion-no-border">
-          <ion-toolbar color="primary">
-            <ion-title mode="md" class="ion-no-padding">
-              <ion-label >
-                <ion-text color="secondary">Detalles</ion-text>
-                <p><ion-text color="white"><strong>Turnos</strong></ion-text></p>
-                
-              </ion-label>
-            </ion-title>
-            <ion-avatar slot="end">
-              <img src="./assets/img/PrestaIconoPositivo.png" />
-            </ion-avatar>
-          </ion-toolbar>
-        </ion-header>
-        
-        <ion-content mode="ios" color="primary">
-         
-        
-         
-          
-        <ion-grid class="gridoption">
-          
-          <ion-card> 
-            <ion-card-header>
-            <img alt="Silhouette of mountains" src="./assets/img/PrestaTurnosAlcancia.png" /></ion-card-header>
-            
-            
-          <ion-row color="primary" class="scroll-x">
-            <div class="horizontal-scroll">
-            
-        <ion-col *ngFor="let turno of turnos" >
-        <ion-card  color="success">
-          <ion-card-content>
-        
-            
-          <ion-card-subtitle style="text-align: center;">
-            Turno {{turno.id}}: {{turno.fechaDeturno.toDate() | date}}
-           
-              <ion-card-title class="custom-input" style="font-size: 16px; text-align: center;">{{turno.nombre}}</ion-card-title>
-           
-          </ion-card-subtitle>
-          <ion-card-subtitle>
-           
-            
-            
-         
-        </ion-card-subtitle>
+                          <ion-card-title
+                            *ngFor="let transaccion of filtrarTransaccionesPorTurno(turno.id)"
+                            class="custom-input"
+                            style="font-size: 14px; text-align: center"
+                            >{{transaccion.remitente.nombres}}</ion-card-title
+                          >
+                        </ion-card-subtitle>
+                      </ion-card-content></ion-card
+                    >
+                    <ion-card class="ion-padding">
+                      <ion-card-content>
+                        <ion-card-subtitle
+                          color="warning"
+                          style="text-align: center"
+                        >
+                          Integrantes:
+
+                          <ion-card-title
+                            *ngFor="let integrante of datosAlcancia.integrantes"
+                            class="custom-input"
+                            style="font-size: 14px; text-align: center"
+                            >{{integrante.nombres}}</ion-card-title
+                          >
+                        </ion-card-subtitle>
+                      </ion-card-content>
+                    </ion-card>
+                  </ion-card-content></ion-card
+                >
+              </ion-col>
+            </div>
+          </ion-row>
+        </ion-card>
+      </ion-grid>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-modal #modalEditarAlcanciaProductos>
+  <ng-template>
+    <ion-header color="primary">
+      <ion-toolbar color="primary">
+        <ion-buttons color="secondary" slot="start">
+          <ion-button
+            color="tertiary"
+            (click)="cancelModalEditarAlcanciaProductos()"
+            ><ion-icon name="arrow-back-outline"></ion-icon
+          ></ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-header class="ion-no-border">
+      <ion-toolbar color="primary">
+        <ion-title mode="md" class="ion-no-padding">
+          <ion-label>
+            <ion-text color="secondary">Editar</ion-text>
+            <p>
+              <ion-text color="white"><strong>Alcancia</strong></ion-text>
+            </p>
+          </ion-label>
+        </ion-title>
+        <ion-avatar slot="end">
+          <img src="./assets/img/PrestaIconoNegativo.png" />
+        </ion-avatar>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content mode="ios" color="primary">
+      <ion-card color="primary">
+        <ion-card-content>
+          <ion-list-header class="ion-tex-center"
+            ><img src="./assets/img/bannerintegrantes.png" alt=""
+          /></ion-list-header>
+          <ion-list [inset]="true">
+            <ion-item *ngFor="let integrante of datosAlcancia.integrantes">
+              <ion-label>{{integrante.nombres}} </ion-label>
+              <ion-button (click)="eliminarIntegrante()" slot="end">Eliminar</ion-button>
+            </ion-item>
+          </ion-list>
+
+          <h2 class="ion-text-center">
+            Al eliminar el integrante, queda disponible su turno. Al ingresar un
+            nuevo integrante en el turno correspondiente, este debera cancelar
+            los turnos ya avanzados.
+          </h2>
         </ion-card-content>
-        </ion-card>
-        <ion-card  class="ion-padding">
-          <ion-card-content class="ion-text-center">
-            <ion-card class="ion-padding"><ion-card-content>
-            <ion-card-subtitle *ngIf="filtrarTransaccionesPorTurno(turno.id).length > 0"  color="success" style="text-align: center;">
-             Pagos registrados:
-             
-                <ion-card-title *ngFor="let transaccion of filtrarTransaccionesPorTurno(turno.id)"  class="custom-input" style="font-size: 14px; text-align: center;">{{transaccion.remitente.nombres}}</ion-card-title>
-             
-            </ion-card-subtitle>
-          </ion-card-content></ion-card>
-          <ion-card  class="ion-padding">
-            <ion-card-content>
-            <ion-card-subtitle color="warning" style="text-align: center;">
-              Integrantes:
-              
-                 <ion-card-title *ngFor="let integrante of datosAlcancia.integrantes" class="custom-input" style="font-size: 14px; text-align: center;"
-                 >{{integrante.nombres}}</ion-card-title>
-                 
-              
-             </ion-card-subtitle>
-           
-          </ion-card-content>
-        </ion-card>
-        </ion-card-content></ion-card>
-        </ion-col>
-        
-      
-        
-        </div>
-        
-        </ion-row>
-        
-        
-        </ion-card>
-        </ion-grid>
-        
-        
-           
-        
-        </ion-content>
-        
-      </ng-template>
-      
-    </ion-modal>
+      </ion-card>
+
+      <ion-card color="primary">
+        <a href=""><img src="./assets/img/finalizar.png" alt="" /></a>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <h2 class="ion-text-center">
+                  Puedes eliminar la alcancia una vez se hayan cumplido todos
+                  los turnos ó si aún no se ha integrado ningún usuario.
+                </h2>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-button
+        expand="block"
+        color="secondary"
+        class="ion-text-center"
+        slot="center"
+        >Confirmar</ion-button
+      >
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
